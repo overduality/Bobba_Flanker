@@ -71,7 +71,7 @@ struct CollabspaceCard : View{
                     .offset(y: -18)
             VStack(alignment: .leading, spacing: 12){
                 Text("Available timeslot").font(.system(size: 13)).fontWeight(.medium)
-                TimeslotManager()
+                TimeslotManager(collabSpace: .constant(collabSpace), selectedDate: .constant(selectedDate))
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 24)

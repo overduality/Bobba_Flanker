@@ -20,12 +20,14 @@ struct CoBoApp: App {
 
                 // Populate User data
                 try populateData(container: container, fetchDataFunction: DataManager.getUsersData)
-                
+               
                 // Populate CollabSpace data
                 try populateData(container: container,fetchDataFunction: DataManager.getCollabSpacesData)
                 
                 // Populate Timeslot data
                 try populateData(container: container, fetchDataFunction: DataManager.getTimeslotsData)
+                
+                try populateData(container: container, fetchDataFunction: DataManager.getBookingData)
             } catch {
                 print("Failed to pre-seed database.")
             }

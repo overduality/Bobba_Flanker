@@ -9,24 +9,41 @@ import SwiftUI
 
 struct TimeslotComponent: View {
     @Binding var timeslot: Timeslot
-
+    @Binding var isBooked: Bool
     var body: some View {
         Button(action: {
             
         }) {
-            Text("\(timeslot.name)")
-                .font(.system(size: 11, weight: .medium))
-                .foregroundColor(Color("Dark-Purple"))
-                
-                .frame(width:93, height: 36)
-                .background(
-                    Color.white
-                )
-                .cornerRadius(12)
-                .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color("Light-Purple"), lineWidth: 1)
+            if (isBooked){
+                Text("\(timeslot.name)")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(Color.gray)
+                    
+                    .frame(width:93, height: 36)
+                    .background(
+                        Color.white
                     )
+                    .cornerRadius(12)
+                    .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+            }else{
+                Text("\(timeslot.name)")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(Color("Dark-Purple"))
+                    
+                    .frame(width:93, height: 36)
+                    .background(
+                        Color.white
+                    )
+                    .cornerRadius(12)
+                    .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color("Light-Purple"), lineWidth: 1)
+                        )
+            }
+            
         }
     }
   
@@ -36,7 +53,7 @@ struct TimeslotComponent: View {
 #Preview {
 //    // Create sample timeslots with specific times
     let timeslot = DataManager.getTimeslotsData()[0]
-    TimeslotComponent(timeslot: .constant(timeslot))
+    TimeslotComponent(timeslot: .constant(timeslot), isBooked: .constant(true))
 //    let morningSlot = Timeslot(
 //        startTime: Calendar.current.date(from: DateComponents(hour: 9, minute: 0))!,
 //        endTime: Calendar.current.date(from: DateComponents(hour: 10, minute: 0))!

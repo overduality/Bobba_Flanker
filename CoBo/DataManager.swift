@@ -38,6 +38,33 @@ final class DataManager {
         ]
     }
     
+    static func getBookingData() -> [Booking] {
+        return [
+            Booking(
+                name: "Lokajaya's Meeting",
+                coordinator: DataManager.getUsersData()[0],
+                purpose: BookingPurpose.groupDiscussion,
+                date: Date(),
+                participants: [],
+                timeslot: DataManager.getTimeslotsData()[5],
+                collabSpace: DataManager.getCollabSpacesData()[0],
+                status: BookingStatus.notCheckedIn,
+                checkInCode:"Check-In Code"
+            ),
+            Booking(
+                name: "Lokajaya's Meeting",
+                coordinator: DataManager.getUsersData()[0],
+                purpose: BookingPurpose.groupDiscussion,
+                date: Date(),
+                participants: [],
+                timeslot: DataManager.getTimeslotsData()[4],
+                collabSpace: DataManager.getCollabSpacesData()[1],
+                status: BookingStatus.notCheckedIn,
+                checkInCode:"Check-In Code"
+            )
+        ]
+    }
+    
     static func getCollabSpacesData() -> [CollabSpace] {
         // TODO: add image
         return [
