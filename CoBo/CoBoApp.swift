@@ -12,7 +12,7 @@ import SwiftData
 struct CoBoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            IntroductionView()
         }
         .modelContainer(for: [Booking.self, CollabSpace.self, Timeslot.self, User.self]) { result in
             do {

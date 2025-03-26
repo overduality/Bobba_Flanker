@@ -39,35 +39,40 @@ final class DataManager {
     }
     
     static func getCollabSpacesData() -> [CollabSpace] {
+        // TODO: add image
         return [
             CollabSpace(
                 name: "Collab - 02",
                 capacity: 8,
                 whiteboardAmount: 0,
                 tableWhiteboardAmount: 1,
-                tvAvailable: true
+                tvAvailable: true,
+                image: "collab-03-img"
             ),
             CollabSpace(
                 name: "Collab - 03",
                 capacity: 8,
                 whiteboardAmount: 0,
                 tableWhiteboardAmount: 1,
-                tvAvailable: true
+                tvAvailable: true,
+                image: "collab-03-img"
             ),
             CollabSpace(
                 name: "Collab - 03A",
                 capacity: 8,
                 whiteboardAmount: 0,
                 tableWhiteboardAmount: 1,
-                tvAvailable: false
+                tvAvailable: false,
+                image: "collab-03-img"
             ),
             CollabSpace(
                 name: "Collab - 07A",
                 capacity: 8,
                 whiteboardAmount: 1,
                 tableWhiteboardAmount: 0,
-                tvAvailable: false
-            ),
+                tvAvailable: false,
+                image: "collab-07-img"
+            )
             
         ]
     }
