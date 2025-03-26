@@ -15,12 +15,14 @@ class CollabSpace {
     var whiteboardAmount: Int
     var tableWhiteboardAmount: Int
     var tvAvailable: Bool
+    var image:String
     
-    init(name: String, capacity: Int, whiteboardAmount: Int, tableWhiteboardAmount: Int, tvAvailable: Bool) {
+    init(name: String, capacity: Int, whiteboardAmount: Int, tableWhiteboardAmount: Int, tvAvailable: Bool, image: String) {
         self.name = name
         self.capacity = capacity
         self.whiteboardAmount = whiteboardAmount
         self.tableWhiteboardAmount = tableWhiteboardAmount
         self.tvAvailable = tvAvailable
+        self.image = image
     }
 }
