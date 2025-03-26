@@ -18,7 +18,7 @@ struct CollabspaceCardManager : View{
                                                    capacity: collabspace.capacity,
                                                    whiteboardAmount: collabspace.whiteboardAmount,
                                                    tableWhiteboardAmount: collabspace.tableWhiteboardAmount,
-                                                   tvAvailable: collabspace.tvAvailable, image: collabspace.image  )), selectedDate: .constant(Date()))
+                                                  tvAvailable: collabspace.tvAvailable, image: collabspace.image  )), selectedDate: .constant(selectedDate))
                 }
                 
                 
