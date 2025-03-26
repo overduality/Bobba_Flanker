@@ -12,7 +12,7 @@ import SwiftData
 class Timeslot {
     var name: String{
         get {
-            return "\(startHour) - \(endHour)"
+            return "\(doubleToTime(startHour)) - \(doubleToTime(endHour))"
         }
     }
     
