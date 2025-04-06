@@ -158,54 +158,43 @@ struct BookingSuccessView: View {
                     .presentationDetents([.height(400)]) // Set height
                     .presentationCornerRadius(25) // Customize corner radius
             }
-            
-
-            Text("Check-In Time")
-                .padding(.bottom,10)
-                .padding(.top,10)
+            Text("Booking Summary")
                 .bold(true)
+                .padding(.bottom,15)
                 .font(.system(size: 15))
             HStack{
-                Text("Available on " + "Monday, March 25 2025 (07.45 - 08.10 AM)")
+                Text("Date")
+                    .font(.system(size: 14))
+                Spacer()
+                Text("Date Placeholder")
                     .italic()
-                    .bold()
-                Text("Booking Summary")
-                    .bold(true)
-                    .padding(.bottom,15)
-                    .font(.system(size: 15))
-                HStack{
-                    Text("Date")
-                        .font(.system(size: 14))
-                    Spacer()
-                    Text("Date Placeholder")
-                        .italic()
-                        .font(.system(size: 14))
-                        .padding(.trailing)
-                }
-                .padding(.bottom,50)
-                Button(action: {
-                    navigationPath = NavigationPath()
-                })
-                {Text("Back to Home Page")
-                        .frame(width: 370, height: 60)
-                        .foregroundColor(.white)
-                        .font(.system(size: 18, design: .default))
-                        .background(
-                            ZStack {
-                                RadialGradient(gradient: Gradient(colors: [(Color(red: 0.5, green: 0.1, blue: 1)), Color.clear]),
-                                               center: .topLeading, startRadius: 20, endRadius: 200)
-                                RadialGradient(gradient: Gradient(colors: [(Color(red: 0.5, green: 0.1, blue: 1)), Color.clear]),
-                                               center: .topTrailing, startRadius: 20, endRadius: 200)
-                                RadialGradient(gradient: Gradient(colors: [(Color(red: 0.5, green: 0.1, blue: 1)), Color.clear]),
-                                               center: .center, startRadius: 20, endRadius: 200)
-                            }
-                        )
-                        .cornerRadius(24)
-                }
+                    .font(.system(size: 14))
+                    .padding(.trailing)
             }
+            .padding(.bottom,50)
+            Button(action: {
+                navigationPath = NavigationPath()
+            })
+            {
+                Text("Back to Home Page")
+                    .frame(width: 370, height: 60)
+                    .foregroundColor(.white)
+                    .font(.system(size: 18, design: .default))
+                    .background(
+                        ZStack {
+                            RadialGradient(gradient: Gradient(colors: [(Color(red: 0.5, green: 0.1, blue: 1)), Color.clear]),
+                                           center: .topLeading, startRadius: 20, endRadius: 200)
+                            RadialGradient(gradient: Gradient(colors: [(Color(red: 0.5, green: 0.1, blue: 1)), Color.clear]),
+                                           center: .topTrailing, startRadius: 20, endRadius: 200)
+                            RadialGradient(gradient: Gradient(colors: [(Color(red: 0.5, green: 0.1, blue: 1)), Color.clear]),
+                                           center: .center, startRadius: 20, endRadius: 200)
+                        }
+                    )
+                    .cornerRadius(24)
+            }
+        }
             .safeAreaPadding()
             .navigationBarBackButtonHidden(true)
-        }
     }
 }
 
