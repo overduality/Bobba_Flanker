@@ -7,10 +7,14 @@
 
 import SwiftUI
 struct TimeslotManager : View{
+    @Environment(\.modelContext) var modelContext
+    
     @Binding var navigationPath: NavigationPath
     @Binding var collabSpace: CollabSpace?
     @Binding var selectedDate: Date?
-    @State var timeslots: [Timeslot] = DataManager.getTimeslotsData()
+    
+    var timeslotController = TimeslotController()
+    @State var timeslots: [Timeslot] = []
     
     var body: some View{
         let availableTimeslots = getAvailableTimeslots()
@@ -23,28 +27,33 @@ struct TimeslotManager : View{
                 TimeslotComponent(navigationPath: $navigationPath, timeslot: .constant(timeslot), isBooked: .constant(isBooked), selectedDate: selectedDate!, collabSpace: collabSpace!)
             }
         }
+        .onAppear() {
+            timeslotController.setupModelContext(modelContext)
+            timeslots = timeslotController.getAllTimeslot()
+        }
     }
     private func getAvailableTimeslots() -> [Timeslot] {
         guard let selectedDate = selectedDate else { return timeslots }
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: Date())
-        let selectedDay = calendar.startOfDay(for: selectedDate)
         
         return timeslots
     }
     private func getTimeslotStatus(timeslot: Timeslot) -> Bool {
-        let bookings: [Booking] = DataManager.getBookingData()
-        let currentTime = getCurrentHour()
-        
-        if timeslot.endHour < currentTime {
-            return true
-        }
+        var bookingController = BookingController()
+        bookingController.setupModelContext(modelContext)
+        let bookings: [Booking] = bookingController.getAllBooking()
+        let calendar = Calendar.current
         
         guard let selectedDate = selectedDate, let collabSpace = collabSpace else {
             return false
         }
         
-        let calendar = Calendar.current
+        let today = Date()
+        let currentTime = getCurrentHour()
+        
+        if timeslot.endHour < currentTime && isSameDay(date1: today, date2: selectedDate)  {
+            return true
+        }
+        
         let selectedDay = calendar.startOfDay(for: selectedDate)
         
         return bookings.contains { booking in

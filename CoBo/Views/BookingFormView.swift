@@ -9,11 +9,14 @@ import SwiftUI
 import SwiftData
 
 struct BookingFormView: View {
+    @Environment(\.modelContext) var modelContext
     @Binding var navigationPath: NavigationPath
     
     let bookingDate: Date
     let timeslot: Timeslot
     let collabSpace: CollabSpace
+    
+    var userController = UserController()
     
     var formattedDate: String {
         let weekdayFormatter = DateFormatter()
@@ -28,7 +31,7 @@ struct BookingFormView: View {
     @State var meetingName: String = ""
     @State var bookingCoordinator: User?
     @State var bookingPurpose: BookingPurpose? = nil
-    @State private var selectedItems: [User] = [DataManager.getUsersData()[1]]
+    @State private var selectedItems: [User] = []
     
     @State var showAlert: Bool = false
     @State var emptyFields: [String] = []
@@ -36,7 +39,7 @@ struct BookingFormView: View {
     @State private var isNavigatingToBookingConfirmation = false
     @State private var bookingToConfirm: Booking?
     
-    var users: [User] = DataManager.getUsersData()
+    @State var users: [User] = []
     
     var body: some View {
         ScrollView {
@@ -154,6 +157,10 @@ struct BookingFormView: View {
             )
             
             BookingConfirmationView(navigationPath: $navigationPath, booking:newBooking)
+        }
+        .onAppear() {
+            userController.setupModelContext(modelContext)
+            users = userController.getAllUser()
         }
         
     }

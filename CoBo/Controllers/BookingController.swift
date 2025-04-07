@@ -11,17 +11,13 @@ import SwiftData
 class BookingController {
     var modelContext: ModelContext?
     
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-    
     func setupModelContext(_ modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
     func getAllBooking() -> [Booking] {
         guard let context = modelContext else {
-            print("Model Context is Not Available")
+            print("Model Context is Not Available : Get All Bookings")
             return []
         }
         
@@ -38,6 +34,19 @@ class BookingController {
         return []
     }
     
+    func addBooking(booking: Booking) {
+        guard let context = modelContext else {
+            print("Model Context is Not Available : Add Booking")
+            return
+        }
+        
+        do {
+            context.insert(booking)
+            try context.save()
+        } catch {
+            print("Error adding booking: \(error)")
+        }
+    }
     
     
     

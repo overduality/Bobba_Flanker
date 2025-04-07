@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct BookingConfirmationView: View {
+    @Environment(\.modelContext) var modelContext
     @Binding var navigationPath: NavigationPath
+    
+    var bookingController = BookingController()
     var booking: Booking?
     
     var formattedBookingDate: String {
@@ -89,7 +92,7 @@ struct BookingConfirmationView: View {
                 HStack(alignment: .top) {
                     Text("Participants").font(.system(size: 14))
                     Spacer()
-                    VStack{
+                    VStack(alignment: .trailing){
                         ForEach(booking?.participants ?? []) { participant in
                             Text(participant.name).font(.system(size: 13, weight: .medium))
                         }
@@ -132,10 +135,14 @@ struct BookingConfirmationView: View {
         .navigationDestination(for: BookingSuccessContext.self) { context in
             BookingSuccessView(navigationPath: $navigationPath, booking: context.booking)
         }
+        .onAppear() {
+            bookingController.setupModelContext(modelContext)
+        }
     }
     
     func confirmBooking() {
         guard let unwrappedBooking = booking else { return }
+        bookingController.addBooking(booking: unwrappedBooking)
         navigationPath.append(BookingSuccessContext(booking: unwrappedBooking))
     }
 }
