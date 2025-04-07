@@ -9,16 +9,25 @@ import Foundation
 import SwiftData
 
 class TimeslotController {
-    let modelContext: ModelContext
+    var modelContext: ModelContext?
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
+    func setupModelContext(_ modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
     func getAllTimeslot() -> [Timeslot] {
+        guard let context = modelContext else {
+            print("Model Context is Not Available")
+            return []
+        }
+        
         let descriptor = FetchDescriptor<Timeslot>()
         do {
-            return try modelContext.fetch(descriptor)
+            return try context.fetch(descriptor)
         } catch {
             print("Error fetching timeslots: \(error)")
             return []

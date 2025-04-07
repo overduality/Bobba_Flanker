@@ -9,16 +9,22 @@ import Foundation
 import SwiftData
 
 class CollabSpaceController {
-    let modelContext: ModelContext
+    var modelContext: ModelContext?
     
-    init(modelContext: ModelContext) {
+    func setupModelContext(_ modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
     func getAllCollabSpace() -> [CollabSpace] {
+        guard let context = modelContext else {
+            print("Model Context is Not Available")
+            return []
+        }
+        
         let descriptor = FetchDescriptor<CollabSpace>()
         do {
-            return try modelContext.fetch(descriptor)
+            print(try context.fetch(descriptor).count)
+            return try context.fetch(descriptor)
         } catch {
             print("Error fetching collab space: \(error)")
             return []
