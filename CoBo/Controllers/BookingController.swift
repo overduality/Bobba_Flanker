@@ -9,19 +9,36 @@ import Foundation
 import SwiftData
 
 class BookingController {
-    let modelContext: ModelContext
+    var modelContext: ModelContext?
     
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
+    func setupModelContext(_ modelContext: ModelContext) {
+        self.modelContext = modelContext
+    }
+    
     func getAllBooking() -> [Booking] {
+        guard let context = modelContext else {
+            print("Model Context is Not Available")
+            return []
+        }
+        
         let descriptor = FetchDescriptor<Booking>()
         do {
-            return try modelContext.fetch(descriptor)
+            return try context.fetch(descriptor)
         } catch {
             print("Error fetching bookings: \(error)")
             return []
         }
     }
+    
+    func getBookingByDate(_ date: Date) -> [Booking]{
+        return []
+    }
+    
+    
+    
+    
 }
