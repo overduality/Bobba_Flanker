@@ -26,7 +26,7 @@ func generatePlaceholderQRCode() -> String {
     BEGIN:VALARM
     ACTION:DISPLAY
     DESCRIPTION:Follow Up for Check-In
-    TRIGGER:PT5M
+    TRIGGER:PT0M
     END:VALARM
 
     END:VEVENT
@@ -43,7 +43,7 @@ func generateQRCode(from string: String) -> UIImage? {
     filter.setValue("M", forKey: "inputCorrectionLevel")
 
     if let outputImage = filter.outputImage {
-        let transform = CGAffineTransform(scaleX: 10, y: 10) 
+        let transform = CGAffineTransform(scaleX: 10, y: 10)
         let scaledCIImage = outputImage.transformed(by: transform)
         
         let context = CIContext()
