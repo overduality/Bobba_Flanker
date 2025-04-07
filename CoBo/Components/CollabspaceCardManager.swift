@@ -6,9 +6,13 @@
 //
 import SwiftUI
 struct CollabspaceCardManager : View{
+    @Environment(\.modelContext) var modelContext
+    
     @Binding var navigationPath: NavigationPath
     @Binding var selectedDate: Date
-    @State var collabSpaces: [CollabSpace] = DataManager.getCollabSpacesData()
+    var collabSpaceController = CollabSpaceController()
+    @State var collabSpaces: [CollabSpace] = []
+    
     
     var body: some View{
         ScrollView(.vertical){
@@ -27,6 +31,10 @@ struct CollabspaceCardManager : View{
                 
             }.padding(12)
             
+        }
+        .onAppear() {
+            collabSpaceController.setupModelContext(self.modelContext)
+            collabSpaces = collabSpaceController.getAllCollabSpace()
         }
     }
 }
