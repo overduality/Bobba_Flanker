@@ -11,17 +11,13 @@ import SwiftData
 class TimeslotController {
     var modelContext: ModelContext?
     
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-    
     func setupModelContext(_ modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
     func getAllTimeslot() -> [Timeslot] {
         guard let context = modelContext else {
-            print("Model Context is Not Available")
+            print("Model Context is Not Available : Get All Timeslot")
             return []
         }
         

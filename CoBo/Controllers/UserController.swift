@@ -11,17 +11,13 @@ import SwiftData
 class UserController {
     var modelContext: ModelContext?
     
-    init(modelContext: ModelContext) {
-        self.modelContext = modelContext
-    }
-    
     func setupModelContext(_ modelContext: ModelContext) {
         self.modelContext = modelContext
     }
     
     func getAllUser() -> [User] {
         guard let context = modelContext else {
-            print("Model Context is Not Available")
+            print("Model Context is Not Available : Get All User")
             return []
         }
         
