@@ -49,7 +49,8 @@ final class DataManager {
                 timeslot: DataManager.getTimeslotsData()[5],
                 collabSpace: DataManager.getCollabSpacesData()[0],
                 status: BookingStatus.notCheckedIn,
-                checkInCode:"908724"
+
+                checkInCode:"111111"
             ),
             Booking(
                 name: "Lokajaya's Meeting",
@@ -65,6 +66,11 @@ final class DataManager {
         ]
     }
     
+    // TODO: for booking log
+    static func getBookingDataByDate(_ date: Date) -> [Booking] {
+        return []
+    }
+    
     static func getCollabSpacesData() -> [CollabSpace] {
         // TODO: add image
         return [
@@ -74,7 +80,7 @@ final class DataManager {
                 whiteboardAmount: 0,
                 tableWhiteboardAmount: 1,
                 tvAvailable: true,
-                image: "collab-03-img"
+                image: "collab-02-img"
             ),
             CollabSpace(
                 name: "Collab - 03",
@@ -90,14 +96,30 @@ final class DataManager {
                 whiteboardAmount: 0,
                 tableWhiteboardAmount: 1,
                 tvAvailable: false,
-                image: "collab-03-img"
+                image: "collab-03a-img"
+            ),
+            CollabSpace(
+                name: "Collab - 04",
+                capacity: 8,
+                whiteboardAmount: 0,
+                tableWhiteboardAmount: 0,
+                tvAvailable: true,
+                image: "collab-04-img"
+            ),
+            CollabSpace(
+                name: "Collab - 05",
+                capacity: 8,
+                whiteboardAmount: 0,
+                tableWhiteboardAmount: 0,
+                tvAvailable: true,
+                image: "collab-05-img"
             ),
             CollabSpace(
                 name: "Collab - 07A",
                 capacity: 8,
                 whiteboardAmount: 1,
                 tableWhiteboardAmount: 0,
-                tvAvailable: false,
+                tvAvailable: true,
                 image: "collab-07-img"
             )
             

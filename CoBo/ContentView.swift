@@ -21,7 +21,7 @@ struct ContentView: View {
                         BookingView()
                     }
                     Tab("Check In", systemImage: "book.closed.fill", value: .checkIn){
-                        Text("This is Check In Page")
+                        CheckinView()
                     }
                     Tab("Booking Log", systemImage: "clock.arrow.circlepath", value: .bookingLog){
                         Text("This is Booking Log Page")
@@ -33,4 +33,9 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
+
+
+
+
 
