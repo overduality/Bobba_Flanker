@@ -42,6 +42,7 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                     HStack {
                         Text(dropdownLabel)
                             .lineLimit(1)
+                            .font(.system(size:13))
                             .foregroundStyle(Color.black)
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -73,6 +74,7 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                             LazyVStack(spacing: 0) {
                                 ForEach(filteredData) { item in
                                     Text(item.dropdownLabel)
+                                        .font(.system(size:13))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding()
                                         .contentShape(Rectangle())

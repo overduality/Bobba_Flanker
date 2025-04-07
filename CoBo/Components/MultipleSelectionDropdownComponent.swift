@@ -34,7 +34,7 @@ struct MultipleSelectionDropdownComponent<T:DropdownProtocol>: View {
     init(selectedData: Binding<[T]>, allData: [T]) {
         self._selectedData = selectedData
         self.allData = allData
-        self.itemColor = .blue
+        self.itemColor = Color.purple
     }
     
     var body: some View {
@@ -54,11 +54,13 @@ struct MultipleSelectionDropdownComponent<T:DropdownProtocol>: View {
             } label: {
                 Text("+ Add Participant")
             }
+            .font(.system (size:12, weight: .medium))
+            .foregroundColor(.white)
                 .padding(.vertical, 10)
                 .padding(.horizontal, 16)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.lightYellow) // Light cream/yellow color
+                        .fill(Color.purple) // Light cream/yellow color
                 )
                 .frame(maxWidth: .infinity, alignment: .leading)
             if (isDropdownExpanded) {

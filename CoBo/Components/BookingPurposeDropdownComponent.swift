@@ -34,6 +34,7 @@ struct BookingPurposeDropdownComponent: View {
                     HStack {
                         Text(dropdownLabel)
                             .lineLimit(1)
+                            .font(.system(size:13))
                             .foregroundStyle(Color.black)
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -58,6 +59,7 @@ struct BookingPurposeDropdownComponent: View {
                                 Text(item.rawValue)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding()
+                                    .font(.system(size:13))
                                     .contentShape(Rectangle())
                                     .onTapGesture {
                                         dropdownLabel = item.rawValue
