@@ -42,28 +42,28 @@ struct BookingFormView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 HStack {
-                    Text("Date")
+                    Text("Date").font(.system(size: 14, weight: .medium))
                     Spacer()
-                    Text(formattedDate)
+                    Text(formattedDate).font(.system(size:13))
                 }
                 .padding(.vertical)
                 Divider()
                 HStack {
-                    Text("Time")
+                    Text("Time").font(.system(size: 14, weight: .medium))
                     Spacer()
-                    Text(timeslot.name)
+                    Text(timeslot.name).font(.system(size:13))
                 }
                 .padding(.vertical)
                 Divider()
                 HStack {
-                    Text("Space")
+                    Text("Space").font(.system(size: 14, weight: .medium))
                     Spacer()
-                    Text(collabSpace.name)
+                    Text(collabSpace.name).font(.system(size:13))
                 }
                 .padding(.vertical)
                 Divider()
                 HStack{
-                    Text("Coordinator")
+                    Text("Coordinator").font(.system(size: 14, weight: .medium))
                     Text("*").foregroundStyle(Color.red)
                 }
                 .padding(.top, 25)
@@ -78,25 +78,27 @@ struct BookingFormView: View {
                         }
                 
                 HStack{
-                    Text("Meeting's Name")
+                    Text("Meeting's Name").font(.system(size: 14, weight: .medium))
                     Text("*").foregroundStyle(Color.red)
                 }
                 .padding(.top, 25)
                 
                 TextField("Challenge Group Meeting", text: $meetingName)
+                    .font(.system(size:13))
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 HStack{
-                    Text("Purpose")
+                    Text("Purpose").font(.system(size: 14, weight: .medium))
                     Text("*").foregroundStyle(Color.red)
                 }
                 .padding(.top, 25)
                 BookingPurposeDropdownComponent(selectedItem: $bookingPurpose)
                 
-                Text("Add Participant(s)")
+                Text("Add Participant(s)").font(.system(size: 14, weight: .medium))
                     .padding(.top, 25)
-                Text("By adding participants, you automatically include them as invitees in iCal event, available after booking")
-                    .padding(.bottom)
+                Text("By adding participants, you automatically include them as invitees in iCal event, available after booking.")
+                    .padding(.top, 4)
+                    .padding(.bottom,4)
                     .font(.system(size: 13))
                     .foregroundStyle(Color.gray)
                 MultipleSelectionDropdownComponent(selectedData: $selectedItems, allData: users)
@@ -107,23 +109,30 @@ struct BookingFormView: View {
                     book()
                 } label: {
                     Text("Book")
-                        .font(.headline)
-                        .fontWeight(.medium)
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
+                        .frame(maxWidth: .infinity)
                         .background(
-                            RoundedRectangle(cornerRadius: 20)
-                                .fill(Color(red: 151/255, green: 117/255, blue: 250/255))
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color("Purple"),
+                                    Color("Medium-Purple")
+                                ]),
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
                         )
+                        .cornerRadius(24)
+                        .padding(.horizontal, 12)
+                        .padding(.top, 12)
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 24)
+              
                 
             }
             .padding(.horizontal)
     }
-        .safeAreaPadding().padding(16)
+        .safeAreaPadding()
         .alert(isPresented: $showAlert) {
             let emptyFields = emptyFields.joined(separator: ", ")
             let message = "Please fill in the following fields: \(emptyFields)"

@@ -33,64 +33,65 @@ struct BookingConfirmationView: View {
                 Text("Review Your Booking")
                     .font(.system(size: 21))
                     .bold()
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 6)
                 Text("Please review your booking before confirming")
                     .font(.system(size: 13))
                     .padding(.bottom, 25)
                 HStack {
                     Text("Date")
+                        .font(.system(size: 14))
                     Spacer()
-                    Text(formattedBookingDate)
+                    Text(formattedBookingDate).font(.system(size: 13, weight: .medium))
                 }
                 .padding(.top, 15)
                 .padding(.bottom, 15)
                 Divider()
                 HStack {
-                    Text("Time")
+                    Text("Time").font(.system(size: 14))
                     Spacer()
-                    Text(booking?.timeslot.name ?? "")
+                    Text(booking?.timeslot.name ?? "").font(.system(size: 13, weight: .medium))
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
                 Divider()
                 HStack {
-                    Text("Space")
+                    Text("Space").font(.system(size: 14))
                     Spacer()
-                    Text(booking?.collabSpace.name ?? "")
+                    Text(booking?.collabSpace.name ?? "").font(.system(size: 13, weight: .medium))
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
                 Divider()
                 HStack {
-                    Text("Coordinator")
+                    Text("Coordinator").font(.system(size: 14))
                     Spacer()
-                    Text(booking?.coordinator?.name ?? "")
+                    Text(booking?.coordinator?.name ?? "").font(.system(size: 13, weight: .medium))
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
                 Divider()
                 HStack {
-                    Text("Meeting Name")
+                    Text("Meeting Name").font(.system(size: 14))
                     Spacer()
-                    Text(booking?.name ?? "")
+                    Text(booking?.name ?? "").font(.system(size: 13, weight: .medium))
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
                 Divider()
                 HStack {
-                    Text("Purpose")
+                    Text("Purpose").font(.system(size: 14))
                     Spacer()
-                    Text(booking?.purpose?.rawValue ?? "")
+                    Text(booking?.purpose?.rawValue ?? "").font(.system(size: 13, weight: .medium))
                 }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
                 Divider()
                 HStack(alignment: .top) {
-                    Text("Participants")
+                    Text("Participants").font(.system(size: 14))
                     Spacer()
-                    VStack {
+                    VStack{
                         ForEach(booking?.participants ?? []) { participant in
-                            Text(participant.name)
+                            Text(participant.name).font(.system(size: 13, weight: .medium))
                         }
                     }
                 }
