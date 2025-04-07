@@ -49,7 +49,6 @@ final class DataManager {
                 timeslot: DataManager.getTimeslotsData()[5],
                 collabSpace: DataManager.getCollabSpacesData()[0],
                 status: BookingStatus.notCheckedIn,
-
                 checkInCode:"111111"
             ),
             Booking(

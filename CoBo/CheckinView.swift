@@ -7,6 +7,7 @@
 import SwiftUI
 struct CheckinView: View {
     @State private var otp: String = ""
+//    private var bookingController : BookingController = BookingController(modelContext: )
     @FocusState private var isTextFieldFocused: Bool
     @State private var showAlert = false
     private let numberOfFieldsInOTP = 6
@@ -51,7 +52,7 @@ struct CheckinView: View {
                     Button(action: {
                             isTextFieldFocused = false
                             showAlert = true
-                            //                        checkInBooking(otp)
+                        
                         }) {
                             Text("Check-in")
                                 .font(.system(size: 15, weight: .medium))
