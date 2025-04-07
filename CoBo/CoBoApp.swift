@@ -45,5 +45,7 @@ struct CoBoApp: App {
                 container.mainContext.insert(item)
             }
         }
+        
+        try container.mainContext.save()
     }
 }
