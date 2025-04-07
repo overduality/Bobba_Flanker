@@ -30,15 +30,15 @@ struct TimeslotManager : View{
         let today = calendar.startOfDay(for: Date())
         let selectedDay = calendar.startOfDay(for: selectedDate)
         
-        if today == selectedDay {
-            let currentTime = getCurrentHour()
-            return timeslots.filter { $0.endHour > currentTime }
-        }
-        
         return timeslots
     }
     private func getTimeslotStatus(timeslot: Timeslot) -> Bool {
         let bookings: [Booking] = DataManager.getBookingData()
+        let currentTime = getCurrentHour()
+        
+        if timeslot.endHour < currentTime {
+            return true
+        }
         
         guard let selectedDate = selectedDate, let collabSpace = collabSpace else {
             return false
