@@ -33,12 +33,12 @@ struct TimeslotManager : View{
         }
     }
     private func getAvailableTimeslots() -> [Timeslot] {
-        guard let selectedDate = selectedDate else { return timeslots }
+        guard selectedDate != nil else { return timeslots }
         
         return timeslots
     }
     private func getTimeslotStatus(timeslot: Timeslot) -> Bool {
-        var bookingController = BookingController()
+        let bookingController = BookingController()
         bookingController.setupModelContext(modelContext)
         let bookings: [Booking] = bookingController.getAllBooking()
         let calendar = Calendar.current
@@ -54,12 +54,13 @@ struct TimeslotManager : View{
             return true
         }
         
-        let selectedDay = calendar.startOfDay(for: selectedDate)
+        
+        _ = calendar.startOfDay(for: selectedDate)
         
         return bookings.contains { booking in
-            let bookingDay = calendar.startOfDay(for: booking.date)
+            _ = calendar.startOfDay(for: booking.date)
             return isSameDay(date1: booking.date, date2: selectedDate) &&
-            isSameCollabSpace(collabSpace1: booking.collabSpace, collabSpace2: collabSpace) && isSameTimeslot(timeslot1: booking.timeslot, timeslot2: timeslot)
+            isSameCollabSpace(collabSpace1: booking.collabSpace, collabSpace2: collabSpace) && isSameTimeslot(timeslot1: booking.timeslot, timeslot2: timeslot) && booking.status != BookingStatus.closed
         }
     }
     func isSameDay(date1: Date, date2: Date) -> Bool {

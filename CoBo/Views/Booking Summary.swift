@@ -10,7 +10,7 @@ import SwiftUI
 struct Booking_Summary: View {
     var booking: Booking
     @State var collabSpace: CollabSpace?
-
+    
     var formattedBookingDate: String {
         let weekdayFormatter = DateFormatter()
         weekdayFormatter.dateFormat = "EEEE"
@@ -20,7 +20,7 @@ struct Booking_Summary: View {
         
         return "\(weekdayFormatter.string(from: booking.date)), \(dateFormatter.string(from: booking.date))"
     }
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -31,7 +31,7 @@ struct Booking_Summary: View {
                     .bold()
                     .font(.system(size: 14))
             }
-
+            
             Divider()
                 .padding(.top, 10)
                 .padding(.bottom, 10)
@@ -43,7 +43,7 @@ struct Booking_Summary: View {
                     .bold()
                     .font(.system(size: 14))
             }
-
+            
             Divider()
                 .padding(.top, 10)
                 .padding(.bottom, 10)
@@ -55,7 +55,7 @@ struct Booking_Summary: View {
                     .bold()
                     .font(.system(size: 14))
             }
-
+            
             Divider()
                 .padding(.top, 10)
                 .padding(.bottom, 10)
@@ -67,7 +67,7 @@ struct Booking_Summary: View {
                     .bold()
                     .font(.system(size: 14))
             }
-
+            
             Divider()
                 .padding(.top, 10)
                 .padding(.bottom, 10)
@@ -97,22 +97,27 @@ struct Booking_Summary: View {
                 Text("Participants")
                     .font(.system(size: 14))
                 Spacer()
-                VStack(alignment: .trailing){
-                    ForEach(booking.participants) { participant in
-                        Text(participant.name).font(.system(size: 13, weight: .medium))
+                if(booking.participants.count == 0) {
+                    Text("No participants inputted").font(.system(size: 13)).foregroundColor(.gray)
+                }else{
+                    VStack(alignment: .trailing){
+                        ForEach(booking.participants) { participant in
+                            Text(participant.name).font(.system(size: 13, weight: .medium))
                         }
-                    
+                        
                     }
                 }
+                
+            }
             Divider()
                 .padding(.top, 10)
                 .padding(.bottom, 10)
-            }
-        
-
-
         }
+        
+        
+        
     }
+}
 
 
 #Preview {

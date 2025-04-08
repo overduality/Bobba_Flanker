@@ -119,7 +119,7 @@ struct CoBoApp: App {
                     participants: [],
                     timeslot: savedTimeslots[1],
                     collabSpace: savedSpaces[1],
-                    status: BookingStatus.notCheckedIn,
+                    status: BookingStatus.closed,
                     checkInCode: "908462"
                 )
                 

@@ -109,7 +109,7 @@ class BookingController {
                 if(bookingStatus == "checkedIn"){
                     return ["You have already checked-in.", "Please contact the administrator for any issues."]
                 }
-                if(bookingStatus == "canceled"){
+                if(bookingStatus == "closed"){
                     return ["This booking has been canceled.", "Please contact the administrator for any issues."]
                 }
                 // check
@@ -142,7 +142,7 @@ class BookingController {
                             if now >= startDate && now <= endDate {
                                 bookingFetched.status = BookingStatus.checkedIn
                                 try context.save()
-                                return ["Check-in successful ✅", "You can now check into your collabspace."]
+                                return ["Check-in successful ✅", "You can now use your space at \(bookingFetched.collabSpace.name)."]
                             } else {
                                 return notifyUserAboutCheckInTime(bookingFetched: bookingFetched)
                             }
@@ -160,7 +160,7 @@ class BookingController {
         return nil
             
         }
-    
+
     // FOR CASE NOT WITHIN CHECK-IN TIME
     func notifyUserAboutCheckInTime(bookingFetched: Booking) -> [String]{
         // format date
@@ -170,7 +170,4 @@ class BookingController {
         
         return ["Not within check-in time ⏳", "You can check-in for your booking at \(bookingFetched.collabSpace.name) on \(formattedDate), at \(bookingFetched.timeslot.startCheckIn) - \(bookingFetched.timeslot.endCheckIn)."]
     }
-    
-    
-    
 }

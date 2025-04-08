@@ -67,8 +67,6 @@ struct CollabspaceCard : View{
                 }
             }
             Divider()
-                .background(Color.gray.opacity(0.3))
-                .frame(width: 329, height: 1)
                     .offset(y: -18)
             VStack(alignment: .leading, spacing: 12){
                 Text("Available timeslot").font(.system(size: 13)).fontWeight(.medium)

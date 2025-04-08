@@ -37,14 +37,7 @@ struct SelectedDateComponent: View {
             .padding()
             .frame(width:72, height: 49)
             .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color("Purple"),
-                        Color("Medium-Purple")
-                    ]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
+                Color("Purple")
             )
             .cornerRadius(12)
             

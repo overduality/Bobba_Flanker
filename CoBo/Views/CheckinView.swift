@@ -33,17 +33,12 @@ struct CheckinView: View {
                         Text("Check-in to Booking").font(.system(size: 21)).fontWeight(.bold)
                         Text("Enter your 6-digit check-in code. You can only check-in once your booking's check-in time has begun.").font(.system(size: 13))
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 4)
+                    .padding(.horizontal, 8)
+                    .padding(.top, 12)
                     
                     // OTP Component
                     VStack{
                         OTPFieldComponent(numberOfFields: numberOfFieldsInOTP, otp: $otp)
-                            .onChange(of: otp) { newOtp in
-                                if newOtp.count == numberOfFieldsInOTP {
-                                    
-                                }
-                            }
                             .focused($isTextFieldFocused)
                     }
                     .padding(.horizontal, 16)
@@ -55,10 +50,14 @@ struct CheckinView: View {
                     }
                     Button(action: {
                         isTextFieldFocused = false
-                        if let checkInResult = bookingController.checkInBooking(otp) {
-//                            print("Checkin result" + checkInResult)
-                            alertTitle = checkInResult[0]
-                            alertMessage = checkInResult[1]
+                        if otp == "" {
+                            alertTitle = "Please input your check-in code!"
+                        }else{
+                            if let checkInResult = bookingController.checkInBooking(otp) {
+                                                        alertTitle = checkInResult[0]
+                                                        alertMessage = checkInResult[1]
+                                                    }
+                            
                         }
                         showAlert = true
 
@@ -70,14 +69,7 @@ struct CheckinView: View {
                                 .padding(.vertical, 16)
                                 .frame(maxWidth: .infinity)
                                 .background(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            Color("Purple"),
-                                            Color("Medium-Purple")
-                                        ]),
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
+                                    Color("Purple")
                                 )
                                 .cornerRadius(24)
                                 .padding(.horizontal, 12)
@@ -101,6 +93,9 @@ struct CheckinView: View {
         }
         .onAppear(){
             bookingController.setupModelContext(self.modelContext)
+        }
+        .onDisappear {
+            otp = ""
         }
         
     }
