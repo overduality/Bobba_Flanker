@@ -155,7 +155,7 @@ struct BookingFormView: View {
             userController.setupModelContext(modelContext)
             users = userController.getAllUser()
         }
-        
+        .toolbar(.hidden, for: .tabBar)
     }
     
     func book() {
