@@ -6,159 +6,250 @@
 //
 
 import SwiftUI
+import Foundation
+
+import SwiftUI
+import Foundation
 
 struct BookingLogDetailsView: View {
-    @Environment(\.modelContext) var modelContext
     @Binding var navigationPath: NavigationPath
+    var booking: Booking
+
+    @State private var users: [User] = []
+    @State private var showCancelSheet = false
+    @State private var cancelCodeInput = ""
+
     var userController = UserController()
     var bookingController = BookingController()
 
-    var booking: Booking
-    
-    var formattedDate: String {
-        let weekdayFormatter = DateFormatter()
-        weekdayFormatter.dateFormat = "EEEE"
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd MMMM YYYY"
-        
-        return "\(weekdayFormatter.string(from: booking.date)), \(dateFormatter.string(from: booking.date))"
-    }
-    
-    @State var meetingName: String = ""
-    @State var bookingCoordinator: User?
-    @State var bookingPurpose: BookingPurpose? = nil
-    @State private var participants: [User] = []
-    
-    @State var showAlert: Bool = false
-    @State var emptyFields: [String] = []
-    
-    @State var users: [User] = []
-    
-    init(navigationPath: Binding<NavigationPath>, booking: Booking) {
-        self._navigationPath = navigationPath
-        print("Init Details")
-        print(booking.name)
-        print(booking.coordinator?.name)
-        self.booking = booking
-        self._meetingName = State(initialValue: booking.name ?? "")
-        self._bookingCoordinator = State(initialValue: booking.coordinator ?? nil)
-        self._bookingPurpose = State(initialValue: booking.purpose ?? nil)
-        self._participants = State(initialValue: booking.participants)
-    }
-    
+    @Environment(\.modelContext) private var modelContext
+
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text("Date").font(.system(size: 14, weight: .medium))
-                    Spacer()
-                    Text(formattedDate).font(.system(size:13))
-                }
-                .padding(.vertical)
+            VStack(alignment: .leading, spacing: 20) {
+                ZStack(alignment: .topLeading) {
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.white, Color.pink.opacity(0.1)]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: 120)
+                    .ignoresSafeArea()
+                    // Header
+                    VStack(alignment: .leading, spacing: 6) {
+                        Spacer()
+                        Text("📄 Booking Details")
+                            .font(.title2).bold()
+                        Spacer()
+                    }}.padding(.bottom,-20)
+
+      
+
+                InfoRow(title: "Name", value: booking.name ?? "N/A")
                 Divider()
-                HStack {
-                    Text("Time").font(.system(size: 14, weight: .medium))
-                    Spacer()
-                    Text(booking.timeslot.name).font(.system(size:13))
-                }
-                .padding(.vertical)
+
+                InfoRow(title: "Date", value: formattedDate(booking.date))
                 Divider()
-                HStack {
-                    Text("Space").font(.system(size: 14, weight: .medium))
-                    Spacer()
-                    Text(booking.collabSpace.name).font(.system(size:13))
-                }
-                .padding(.vertical)
+
+                InfoRow(title: "Timeslot", value: booking.timeslot.name)
                 Divider()
-                HStack{
-                    Text("Coordinator").font(.system(size: 14, weight: .medium))
-                    Text("*").foregroundStyle(Color.red)
-                }
-                .padding(.top, 25)
-                SearchableDropdownComponent(selectedItem: $bookingCoordinator, data: users)
-                    .onChange(of: bookingCoordinator) { oldValue, newValue in
-                            if let coordinatorName = newValue?.name {
-                                meetingName = "\(coordinatorName)'s Meeting"
-                            } else {
-                                meetingName = ""
-                            }
-                        }
-                HStack{
-                    Text("Meeting's Name").font(.system(size: 14, weight: .medium))
-                    Text("*").foregroundStyle(Color.red)
-                }
-                .padding(.top, 25)
-                
-                TextField("Challenge Group Meeting", text: $meetingName)
-                    .font(.system(size:13))
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                
-                HStack{
-                    Text("Purpose").font(.system(size: 14, weight: .medium))
-                    Text("*").foregroundStyle(Color.red)
-                }
-                .padding(.top, 25)
-                BookingPurposeDropdownComponent(selectedItem: $bookingPurpose)
-                Text("Add Participant(s)").font(.system(size: 14, weight: .medium))
-                    .padding(.top, 25)
-                Text("By adding participants, you automatically include them as invitees in iCal event, available after booking.")
-                    .padding(.top, 4)
-                    .padding(.bottom,4)
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color.gray)
-                MultipleSelectionDropdownComponent(selectedData: $participants, allData: users)
-                    .padding(.bottom)
+
+                InfoRow(title: "Collab Space", value: booking.collabSpace.name)
+                Divider()
+
+                InfoRow(title: "Purpose", value: booking.purpose?.rawValue ?? "N/A")
+                Divider()
+
+                InfoRow(title: "Status", value: booking.getStatus())
+
+                Divider()
+                InfoRow(title: "Created At", value: formattedDateTime(booking.createdAt))
+                Divider()
+                InfoRow(title: "Coordinator", value: booking.coordinator?.name ?? "N/A")
+                Divider()
+
+                InfoRow(title: "Participants", value: booking.participants.map { $0.name }.joined(separator: ", "))
+
                 Spacer()
-                Button {
-                    saveChanges()
-                } label: {
-                    Text("Save Changes")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
-                        .padding(.vertical, 16)
-                        .frame(maxWidth: .infinity)
-                        .background(
-                            Color("Purple")
-                        )
-                        .cornerRadius(24)
-                        .padding(.horizontal, 12)
-                        .padding(.top, 12)
-                }
-                Button {
-                    cancelBooking()
-                } label: {
-                    Text("Cancel Booking")
-                        .font(.system(size: 16, weight: .medium))
-                        .foregroundColor(.white)
-                        .padding(.vertical, 16)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.red)
-                        .cornerRadius(24)
-                        .padding(.horizontal, 12)
-                        .padding(.top, 12)
-                }
             }
-            .padding(.horizontal)
+            .padding(.horizontal)                   .ignoresSafeArea()
+            .safeAreaPadding()
+            
+
         }
+        Button(action: {
+            showCancelSheet = true
+        }) {
+            Text("Cancel Booking")
+                .font(.system(size: 16, weight: .medium))
+                .foregroundColor(.white)
+                .padding(.vertical, 16)
+                .frame(maxWidth: .infinity)
+                .background(Color.red)
+                .cornerRadius(24)
+                .padding(.horizontal, 12)
+                .padding(.top, 12)
+        }
+
         .safeAreaPadding()
+        .navigationTitle("Booking Details")
+        .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             userController.setupModelContext(modelContext)
             users = userController.getAllUser()
         }
+        .sheet(isPresented: $showCancelSheet) {
+            CancelBookingSheet(codeInput: $cancelCodeInput, onConfirm: {
+                validateCancelCode()
+            })
+        }
     }
-    
-    func saveChanges() {
-        print("Save Changes")
+
+    func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        return formatter.string(from: date)
     }
-    
-    func cancelBooking() {
-        print("Cancel Booking")
+
+    func formattedDateTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+
+    func validateCancelCode() {
+        // LOGIC
+        if cancelCodeInput == booking.checkInCode {
+            print("Booking cancelled!")
+            showCancelSheet = false
+            // LOGIC
+        } else {
+            print("Invalid code.")
+            
+        }
+    }
+}
+
+struct InfoRow: View {
+    var title: String
+    var value: String
+
+    var body: some View {
+        HStack(alignment: .top) {
+            Text("\(title):")
+                .bold()
+            Spacer()
+            Text(value)
+                .multilineTextAlignment(.trailing)
+        }
+    }
+}
+
+struct CancelBookingSheet: View {
+    @Binding var codeInput: String
+    var onConfirm: () -> Void
+
+    // Focus management
+    @FocusState private var focusedField: Int?
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 24) {
+                Text("""
+                     Enter the 6-Digit
+                     Check-In Code
+                    """)
+                    .font(.title3)
+                    .bold()
+                    .multilineTextAlignment(.center)
+
+                HStack(spacing: 12) {
+                    ForEach(0..<6, id: \.self) { index in
+                        CodeBox(index: index, code: $codeInput)
+                            .focused($focusedField, equals: index)
+                            .onChange(of: codeInput) { _ in
+                                // Auto focus next empty field
+                                if codeInput.count < 6 {
+                                    focusedField = codeInput.count
+                                } else {
+                                    focusedField = nil
+                                }
+                            }
+                    }
+                }
+
+                Button(action: onConfirm) {
+                    Text("Confirm Cancel")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .cornerRadius(12)
+                }
+                .padding(.top, 10)
+
+                Spacer()
+            }
+            .padding()
+            .navigationTitle("Cancel Booking")
+            .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                focusedField = 0
+            }
+        }
+    }
+}
+
+struct CodeBox: View {
+    let index: Int
+    @Binding var code: String
+
+    var body: some View {
+        ZStack {
+            Rectangle()
+                .frame(width: 45, height: 60)
+                .cornerRadius(8)
+                .foregroundColor(Color.gray.opacity(0.2))
+
+            TextField("", text: Binding(
+                get: {
+                    if index < code.count {
+                        let charIndex = code.index(code.startIndex, offsetBy: index)
+                        return String(code[charIndex])
+                    } else {
+                        return ""
+                    }
+                },
+                set: { newValue in
+                    guard newValue.count <= 1, newValue.last?.isWholeNumber ?? true else { return }
+                    var codeArray = Array(code)
+                    if index < codeArray.count {
+                        if newValue.isEmpty {
+                            codeArray.remove(at: index)
+                        } else {
+                            codeArray[index] = newValue.last!
+                        }
+                    } else if index == codeArray.count, !newValue.isEmpty {
+                        codeArray.append(newValue.last!)
+                    }
+                    code = String(codeArray.prefix(6))
+                }
+            ))
+            .frame(width: 45, height: 60)
+            .font(.title)
+            .multilineTextAlignment(.center)
+            .keyboardType(.numberPad)
+        }
     }
 }
 
 #Preview {
     let navigationPath = NavigationPath()
-    let booking = DataManager.getBookingData().first
-    BookingLogDetailsView(navigationPath: .constant(navigationPath), booking: booking!)
+    if let booking = DataManager.getBookingData().first {
+        return BookingLogDetailsView(navigationPath: .constant(navigationPath), booking: booking)
+    } else {
+        return AnyView(Text("No booking data available."))
+    }
 }
