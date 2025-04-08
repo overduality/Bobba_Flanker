@@ -10,7 +10,7 @@ import SwiftData
 
 struct SearchableDropdownComponent<T:DropdownProtocol>: View {
     @State private var isExpanded = false
-    @State private var dropdownLabel = "Select an Option"
+    @State private var dropdownLabel: String
     @State private var searchText = ""
     @Binding private var selectedItem: T?
     
@@ -27,8 +27,11 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
     }
     
     init(selectedItem: Binding<T?>, data: [T]) {
+        print("Init Dropdown")
         self.data = data
         self._selectedItem = selectedItem
+        print(selectedItem.wrappedValue)
+        self._dropdownLabel = State(initialValue: selectedItem.wrappedValue?.dropdownLabel ?? "Select an Option")
     }
     
     var body: some View {
@@ -114,7 +117,16 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                     .ignoresSafeArea()
                 : nil
         )
+        .onChange(of: selectedItem) { oldValue, newValue in
+            print("Run Onchange")
+            dropdownLabel = newValue?.dropdownLabel ?? "Select an Option"
+        }
+        .onAppear {
+            print("Run On Appear")
+            dropdownLabel = selectedItem?.dropdownLabel ?? "Select an Option"
+        }
     }
+    
 }
 
 struct SearchableComponentTestView: View {

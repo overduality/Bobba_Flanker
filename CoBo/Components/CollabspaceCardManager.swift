@@ -19,12 +19,7 @@ struct CollabspaceCardManager : View{
             LazyVStack(spacing: 32){
                 ForEach(collabSpaces, id: \.self){
                     collabspace in
-                    CollabspaceCard(navigationPath: $navigationPath, collabSpace:
-                            .constant(CollabSpace(name: collabspace.name,
-                                                   capacity: collabspace.capacity,
-                                                   whiteboardAmount: collabspace.whiteboardAmount,
-                                                   tableWhiteboardAmount: collabspace.tableWhiteboardAmount,
-                                                  tvAvailable: collabspace.tvAvailable, image: collabspace.image  )), selectedDate: .constant(selectedDate))
+                    CollabspaceCard(navigationPath: $navigationPath, collabSpace: .constant(collabspace), selectedDate: .constant(selectedDate))
                 }
                 
                 

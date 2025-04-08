@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DropdownProtocol: Identifiable {
+protocol DropdownProtocol: Identifiable, Equatable {
     var dropdownLabel: String { get }
     var value: Any { get }
 }

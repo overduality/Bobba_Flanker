@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.modelContext) var modelContext
+    
     enum Page {
             case bookSpace
             case checkIn
@@ -24,7 +26,7 @@ struct ContentView: View {
                         CheckinView()
                     }
                     Tab("Booking Log", systemImage: "clock.arrow.circlepath", value: .bookingLog){
-                        Text("This is Booking Log Page")
+                        BookingLogView()
                     }
                 }
     }

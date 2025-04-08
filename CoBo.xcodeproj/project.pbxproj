@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		709480C32DA49F2600CF1BEB /* BookingLogDetailContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709480C22DA49F2600CF1BEB /* BookingLogDetailContext.swift */; };
 		666763CC2DA3D6A400A5F0B8 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 666763CB2DA3D6A400A5F0B8 /* ConfettiSwiftUI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7082F0FA2D9221FA00FD1178 /* CoBo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoBo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		709480C22DA49F2600CF1BEB /* BookingLogDetailContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookingLogDetailContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,6 +39,7 @@
 		7082F0F12D9221FA00FD1178 = {
 			isa = PBXGroup;
 			children = (
+				709480C22DA49F2600CF1BEB /* BookingLogDetailContext.swift */,
 				7082F0FC2D9221FA00FD1178 /* CoBo */,
 				7082F0FB2D9221FA00FD1178 /* Products */,
 			);
@@ -128,6 +131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				709480C32DA49F2600CF1BEB /* BookingLogDetailContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -261,7 +265,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CoBo/Preview Content\"";
-				DEVELOPMENT_TEAM = F6843B2CZP;
+				DEVELOPMENT_TEAM = F64CG297K7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -290,7 +294,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CoBo/Preview Content\"";
-				DEVELOPMENT_TEAM = F6843B2CZP;
+				DEVELOPMENT_TEAM = F64CG297K7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
