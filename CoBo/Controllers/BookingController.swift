@@ -119,6 +119,8 @@ class BookingController {
                         if let startDate = calendar.date(from: startDateComponents),
                            let endDate = calendar.date(from: endDateComponents) {
                             if now >= startDate && now <= endDate {
+                                bookingFetched.status = BookingStatus.checkedIn
+                                try context.save()
                                 return ["Check-in successful ✅", "You can now check into your collabspace."]
                             } else {
                                 return notifyUserAboutCheckInTime(bookingFetched: bookingFetched)
