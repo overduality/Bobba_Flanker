@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		709480C32DA49F2600CF1BEB /* BookingLogDetailContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709480C22DA49F2600CF1BEB /* BookingLogDetailContext.swift */; };
 		666763CC2DA3D6A400A5F0B8 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 666763CB2DA3D6A400A5F0B8 /* ConfettiSwiftUI */; };
+		709480C32DA49F2600CF1BEB /* BookingLogDetailContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709480C22DA49F2600CF1BEB /* BookingLogDetailContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -265,7 +265,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CoBo/Preview Content\"";
-				DEVELOPMENT_TEAM = F64CG297K7;
+				DEVELOPMENT_TEAM = F6843B2CZP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -294,7 +294,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"CoBo/Preview Content\"";
-				DEVELOPMENT_TEAM = F64CG297K7;
+				DEVELOPMENT_TEAM = F6843B2CZP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

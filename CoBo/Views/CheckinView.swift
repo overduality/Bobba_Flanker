@@ -6,7 +6,12 @@
 //
 import SwiftUI
 struct CheckinView: View {
+    @Environment(\.modelContext) var modelContext
+    var bookingController = BookingController()
+    
     @State private var otp: String = ""
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
     @FocusState private var isTextFieldFocused: Bool
     @State private var showAlert = false
     private let numberOfFieldsInOTP = 6
@@ -33,7 +38,7 @@ struct CheckinView: View {
                     
                     // OTP Component
                     VStack{
-                        OTPFieldView(numberOfFields: numberOfFieldsInOTP, otp: $otp)
+                        OTPFieldComponent(numberOfFields: numberOfFieldsInOTP, otp: $otp)
                             .onChange(of: otp) { newOtp in
                                 if newOtp.count == numberOfFieldsInOTP {
                                     
@@ -49,9 +54,15 @@ struct CheckinView: View {
                         }
                     }
                     Button(action: {
-                            isTextFieldFocused = false
-                            showAlert = true
-                            //                        checkInBooking(otp)
+                        isTextFieldFocused = false
+                        if let checkInResult = bookingController.checkInBooking(otp) {
+//                            print("Checkin result" + checkInResult)
+                            alertTitle = checkInResult[0]
+                            alertMessage = checkInResult[1]
+                        }
+                        showAlert = true
+
+                        
                         }) {
                             Text("Check-in")
                                 .font(.system(size: 15, weight: .medium))
@@ -75,8 +86,8 @@ struct CheckinView: View {
                         .padding(.top, 16)
                         .alert(isPresented: $showAlert) {
                             Alert(
-                                title: Text("Check-in Successful 🎉"),
-                                message: Text("You have successfully checked in."),
+                                title: Text(alertTitle),
+                                message: Text(alertMessage),
                                 dismissButton: .default(Text("OK"))
                             )
                         }
@@ -87,6 +98,9 @@ struct CheckinView: View {
             .onTapGesture {
                 isTextFieldFocused = false
             }
+        }
+        .onAppear(){
+            bookingController.setupModelContext(self.modelContext)
         }
         
     }

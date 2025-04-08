@@ -46,10 +46,9 @@ final class DataManager {
                 purpose: BookingPurpose.groupDiscussion,
                 date: Date(),
                 participants: [],
-                timeslot: DataManager.getTimeslotsData()[5],
+                timeslot: DataManager.getTimeslotsData()[1],
                 collabSpace: DataManager.getCollabSpacesData()[0],
                 status: BookingStatus.notCheckedIn,
-
                 checkInCode:"111111"
             ),
             Booking(
@@ -58,7 +57,7 @@ final class DataManager {
                 purpose: BookingPurpose.groupDiscussion,
                 date: Date(),
                 participants: [],
-                timeslot: DataManager.getTimeslotsData()[4],
+                timeslot: DataManager.getTimeslotsData()[1],
                 collabSpace: DataManager.getCollabSpacesData()[1],
                 status: BookingStatus.notCheckedIn,
                 checkInCode:"908462"
