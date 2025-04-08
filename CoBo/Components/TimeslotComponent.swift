@@ -13,7 +13,7 @@ struct TimeslotComponent: View {
     @Binding var isBooked: Bool
     
     var selectedDate: Date
-    var collabSpace: CollabSpace
+    @Binding var collabSpace: CollabSpace
     
     var body: some View {
         NavigationLink(value: BookingFormContext(date: selectedDate, timeslot: timeslot, collabSpace: collabSpace)) {
@@ -54,5 +54,5 @@ struct TimeslotComponent: View {
     let collabSpace = DataManager.getCollabSpacesData()[0]
     let date = Date.now
     
-    TimeslotComponent(navigationPath: .constant(navigationPath), timeslot: .constant(timeslot), isBooked: .constant(true), selectedDate: date, collabSpace: collabSpace)
+    TimeslotComponent(navigationPath: .constant(navigationPath), timeslot: .constant(timeslot), isBooked: .constant(true), selectedDate: date, collabSpace: .constant(collabSpace))
 }

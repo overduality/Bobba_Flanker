@@ -21,7 +21,9 @@ class TimeslotController {
             return []
         }
         
-        let descriptor = FetchDescriptor<Timeslot>()
+        var descriptor = FetchDescriptor<Timeslot>()
+        descriptor.sortBy = [SortDescriptor(\Timeslot.startHour, order: .forward)]
+        
         do {
             return try context.fetch(descriptor)
         } catch {

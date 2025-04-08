@@ -12,7 +12,7 @@ import SwiftData
 
 struct BookingPurposeDropdownComponent: View {
     @State private var isExpanded = false
-    @State private var dropdownLabel = "Select an Option"
+    @State private var dropdownLabel: String
     @Binding private var selectedItem: BookingPurpose?
     
     let lightGrayColor = Color(red: 243/255, green: 243/255, blue: 243/255)
@@ -21,6 +21,7 @@ struct BookingPurposeDropdownComponent: View {
     
     init(selectedItem: Binding<BookingPurpose?>) {
         self._selectedItem = selectedItem
+        self._dropdownLabel = State(initialValue: selectedItem.wrappedValue?.rawValue ?? "Select an Option")
     }
     
     var body: some View {

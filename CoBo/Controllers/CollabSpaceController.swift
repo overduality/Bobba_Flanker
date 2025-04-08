@@ -21,7 +21,8 @@ class CollabSpaceController {
             return []
         }
         
-        let descriptor = FetchDescriptor<CollabSpace>()
+        var descriptor = FetchDescriptor<CollabSpace>()
+        descriptor.sortBy = [SortDescriptor(\CollabSpace.name, order: .forward)]
         do {
             return try context.fetch(descriptor)
         } catch {
