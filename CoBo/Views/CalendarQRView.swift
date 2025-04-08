@@ -9,7 +9,7 @@ import CoreImage.CIFilterBuiltins
 
 struct CalendarQRView: View {
     @Environment(\.dismiss) var dismiss
-    let booking: Booking  // <-- Accept a booking instance
+    let booking: Booking  
 
     var qrCodeText: String {
         generateQRCodeFromBooking(booking)

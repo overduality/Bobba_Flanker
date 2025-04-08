@@ -30,9 +30,15 @@ func generateQRCodeFromBooking(_ booking: Booking) -> String {
     let endDateStr = dateFormatter.string(from: endDate)
 
     let meetingName = booking.name ?? "Meeting"
-    let meetingDescription = "Check-in Code: \(booking.checkInCode ?? "No Check-in Code")"
-    let organizerName = booking.coordinator?.name ?? "Unknown"
+    let meetingDescription = "Check-in Code: \(booking.checkInCode ?? ""). Be present at \(booking.collabSpace.name)"
+    let organizerName = booking.coordinator?.name ?? ""
     let organizerEmail = booking.coordinator?.email ?? "unknown@email.com"
+
+    let attendees = booking.participants.map { participant in
+        """
+        ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=\(participant.name):mailto:\(participant.email)
+        """
+    }.joined(separator: "\n")
 
     return """
     BEGIN:VCALENDAR
@@ -40,29 +46,27 @@ func generateQRCodeFromBooking(_ booking: Booking) -> String {
     PRODID:-//hacksw/handcal//NONSGML v1.0//EN
     BEGIN:VEVENT
     UID:\(UUID().uuidString)
+    DTSTAMP:\(startDateStr)
     DTSTART:\(startDateStr)
     DTEND:\(endDateStr)
     SUMMARY:\(meetingName)
     DESCRIPTION:\(meetingDescription)
     ORGANIZER;CN=\(organizerName):mailto:\(organizerEmail)
-
+    \(attendees)
     BEGIN:VALARM
     ACTION:DISPLAY
-    DESCRIPTION:Reminder for Meeting
+    DESCRIPTION:Reminder for \(meetingName)
     TRIGGER:-PT15M
     END:VALARM
-
     BEGIN:VALARM
     ACTION:DISPLAY
-    DESCRIPTION:Follow Up for Check-In
-    TRIGGER:PT0M
+    DESCRIPTION:Follow-up for \(meetingName)
+    TRIGGER;RELATED=END:PT60M
     END:VALARM
-
     END:VEVENT
     END:VCALENDAR
     """
 }
-
 
 
 func generateQRCode(from string: String) -> UIImage? {
@@ -86,3 +90,4 @@ func generateQRCode(from string: String) -> UIImage? {
     print("Failed to generate QR Code")
     return nil
 }
+    
