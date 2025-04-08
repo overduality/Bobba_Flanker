@@ -9,4 +9,5 @@ import Foundation
 
 struct BookingSuccessContext: Hashable {
     let booking: Booking
+    let isAutoCheckIn: Bool
 }

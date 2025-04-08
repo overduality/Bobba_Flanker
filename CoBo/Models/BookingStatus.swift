@@ -9,8 +9,8 @@ import Foundation
 
 // TODO: Better case naming for BookingStatus
 enum BookingStatus: String, Codable, Equatable{
-    case checkedIn
-    case notCheckedIn
-    case closed
-    case canceled
+    case checkedIn = "Checked In"
+    case notCheckedIn = "Not Checked In"
+    case closed = "Closed"
+    case canceled = "Canceled"
 }

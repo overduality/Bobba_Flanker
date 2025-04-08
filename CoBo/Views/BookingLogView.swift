@@ -15,11 +15,7 @@ struct BookingLogView: View {
     
     var bookingController = BookingController()
     
-    var bookings: [Booking] {
-        get {
-            bookingController.getBookingsByDate(selectedDate)
-        }
-    }
+    @State var bookings: [Booking] = []
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -72,6 +68,10 @@ struct BookingLogView: View {
         }
         .onAppear() {
             bookingController.setupModelContext(modelContext)
+            bookings = bookingController.getBookingsByDate(selectedDate)
+        }
+        .onChange(of: selectedDate) { oldValue, newValue in
+            bookings = bookingController.getBookingsByDate(newValue)
         }
     }
 }

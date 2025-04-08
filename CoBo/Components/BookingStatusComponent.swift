@@ -12,13 +12,23 @@ struct BookingStatusComponent: View {
     
     var label: String {
         get {
-            return "Awaiting for check-in ⏳"
+            return switch status {
+                case .checkedIn: "Checked In ✅"
+                case .notCheckedIn: "Awaiting for check-in ⏳"
+                case .closed: "Closed ❌"
+                case .canceled: "Canceled ❌"
+            }
         }
     }
     
     var color: Color {
         get {
-            return Color.yellow.opacity(0.2)
+            return switch status {
+                case .checkedIn: Color.green.opacity(0.2)
+                case .notCheckedIn: Color.yellow.opacity(0.2)
+                case .closed: Color.red.opacity(0.2)
+                case .canceled: Color.red.opacity(0.2)
+            }
         }
     }
     
@@ -34,7 +44,8 @@ struct BookingStatusComponent: View {
 #Preview {
     VStack {
         BookingStatusComponent(status: .notCheckedIn)
-        BookingStatusComponent(status: .notCheckedIn)
-        BookingStatusComponent(status: .notCheckedIn)
+        BookingStatusComponent(status: .checkedIn)
+        BookingStatusComponent(status: .closed)
+        BookingStatusComponent(status: .canceled)
     }
 }
