@@ -12,4 +12,5 @@ enum BookingStatus: String, Codable, Equatable{
     case checkedIn
     case notCheckedIn
     case closed
+    case canceled
 }

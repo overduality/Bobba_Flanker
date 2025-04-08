@@ -34,6 +34,8 @@ class Booking: Hashable {
                 return "notCheckedIn"
             case .closed:
                 return "closed"
+            case .canceled:
+                return "canceled"
         }
     }
     
