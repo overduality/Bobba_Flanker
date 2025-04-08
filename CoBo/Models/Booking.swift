@@ -19,7 +19,7 @@ class Booking: Hashable {
     var createdAt: Date
     var timeslot: Timeslot
     var collabSpace: CollabSpace
-    var status: BookingStatus
+    var status: BookingStatus 
     var checkInCode: String?
     
     func getCalendarQRCode() -> Image? {
@@ -28,17 +28,17 @@ class Booking: Hashable {
     
     func getStatus() -> String {
         switch status {
-            case .checkedIn:
-                return "checkedIn"
-            case .notCheckedIn:
-                return "notCheckedIn"
-            case .closed:
-                return "closed"
-            case .canceled:
-                return "canceled"
+        case .notCheckedIn:
+            return "Not checked in yet"
+        case .checkedIn:
+            return "Checked in"
+        case .canceled:
+            return "Cancelled"
+        default:
+            return "Unknown"
         }
     }
-    
+
 
     init(name: String = "", coordinator: User? = nil, purpose: BookingPurpose? = nil, date: Date, participants: [User] = [], timeslot: Timeslot, collabSpace: CollabSpace, status: BookingStatus = .notCheckedIn, checkInCode: String = "") {
         self.name = name
