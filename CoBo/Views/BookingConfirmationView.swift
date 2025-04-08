@@ -76,8 +76,7 @@ struct BookingConfirmationView: View {
                 HStack {
                     Text("Meeting Name").font(.system(size: 14))
                     Spacer()
-                    Text(booking?.name ?? "").font(.system(size: 13, weight: .medium))
-                }
+                    Text(booking?.name ?? "").font(.system(size: 13, weight: .medium)).frame(maxWidth: .infinity, alignment: .trailing)                }
                 .padding(.top, 10)
                 .padding(.bottom, 10)
                 Divider()
@@ -93,9 +92,14 @@ struct BookingConfirmationView: View {
                     Text("Participants").font(.system(size: 14))
                     Spacer()
                     VStack(alignment: .trailing){
-                        ForEach(booking?.participants ?? []) { participant in
-                            Text(participant.name).font(.system(size: 13, weight: .medium))
+                        if booking?.participants.count ?? 0 == 0 {
+                            Text("No participants inputted").font(.system(size: 13)).foregroundColor(.gray)
+                        }else{
+                            ForEach(booking?.participants ?? []) { participant in
+                                Text(participant.name).font(.system(size: 13, weight: .medium))
+                            }
                         }
+                        
                     }
                 }
                 .padding(.top, 10)
@@ -111,14 +115,7 @@ struct BookingConfirmationView: View {
                             .padding(.vertical, 16)
                             .frame(maxWidth: .infinity)
                             .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        Color("Purple"),
-                                        Color("Medium-Purple")
-                                    ]),
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
+                                Color("Purple")
                             )
                             .cornerRadius(24)
                             .padding(.horizontal, 12)

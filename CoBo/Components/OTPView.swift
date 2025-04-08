@@ -97,7 +97,7 @@ struct OtpModifier: ViewModifier {
             .font(.system(size: 14))
             .background(
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(Color(.systemGray6), lineWidth: 1)
+                    .stroke(Color(.systemGray4), lineWidth: 1)
             )
     }
 }

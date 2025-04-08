@@ -37,28 +37,34 @@ struct BookingLogView: View {
                         Text("Booking Logs").font(.system(size: 21)).fontWeight(.bold)
                         Text("Search for reservation records here.").font(.system(size: 13))
                     }
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, 24)
                     .padding(.top, 28)
                 }
                 VStack(alignment: .leading, spacing: 24) {
-                    Text("Search by date")
-                    DateManager(selectedDate: $selectedDate)
-                    Text("Bookings")
-                    ScrollView {
-                        VStack {
-                            ForEach(bookings) { booking in
-                                BookingLogCardComponent(booking: booking)
-                                    .padding(.vertical)
-                                    .onTapGesture { CGPoint in
-                                        navigationPath.append(BookingLogDetailContext(booking: booking))
-                                    }
+                    VStack(alignment: .leading, spacing: 16){
+                        Text("Search by date 🔍").font(.system(size: 14)).fontWeight(.medium)
+                        DateManager(selectedDate: $selectedDate)
+                    }
+                    VStack(alignment: .leading){
+                        Text("Booking Logs").font(.system(size: 14)).fontWeight(.medium)
+                        ScrollView {
+                            VStack {
+                                ForEach(bookings) { booking in
+                                    BookingLogCardComponent(booking: booking)
+                                        .padding(.vertical)
+                                        .onTapGesture { CGPoint in
+                                            navigationPath.append(BookingLogDetailContext(booking: booking))
+                                        }
+                                }
+                                
                             }
-                            
                         }
                     }
+                    
                 }
                 .safeAreaPadding()
                 .padding(.horizontal, 16)
+                .padding(.top, -54)
             }
             .navigationDestination(for: BookingLogDetailContext.self) { context in
                 BookingLogDetailsView(navigationPath: $navigationPath, booking: context.booking)

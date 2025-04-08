@@ -102,14 +102,7 @@ struct IntroductionView:View{
                                         .padding(.vertical, 16)
                                         .frame(maxWidth: .infinity)
                                         .background(
-                                            LinearGradient(
-                                                gradient: Gradient(colors: [
-                                                    Color("Purple"),
-                                                    Color("Medium-Purple")
-                                                ]),
-                                                startPoint: .top,
-                                                endPoint: .bottom
-                                            )
+                                            Color("Purple")
                                         )
                                         .cornerRadius(24)
                                         .padding(.horizontal, 12)

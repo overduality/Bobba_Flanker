@@ -42,7 +42,7 @@ struct BookingSuccessView: View {
                             checkmarkShape()
                                 .stroke(Color.white, style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
                                 .frame(width: 65, height: 65)
-                        }
+                        }.padding(.horizontal, 16)
                         
                         Spacer()
                         
@@ -74,89 +74,92 @@ struct BookingSuccessView: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                     } .padding(.bottom,-30)
                     
-                    Text("Your booking has been placed!")
-                        .bold()
-                        .font(.system(size: 17))
-                    
-                    Text("Now save this code")
-                        .bold()
-                        .padding(.bottom, 10)
-                        .font(.system(size: 17))
-                    
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("This code won't be shown again.")
+                    VStack(alignment: .leading){
+                        VStack(alignment: .leading){
+                            Text("Your booking has been placed!")
+                                .bold()
+                                .font(.system(size: 17))
+                            
+                            Text("Now save this code.")
+                                .bold()
+                                .padding(.bottom, 10)
+                                .font(.system(size: 17))
+                            
+                            Text("This code won't be shown again. ")
                                 .font(.system(size: 13))
                                 .foregroundColor(Color(red: 127 / 255, green: 41 / 255, blue: 154 / 255))
                                 .italic()
                                 .bold()
-                            
-                            Text("Save this 6-digit code")
+                            +
+                            Text("Save this 6-digit code for future check-in to verify your attendance.")
                                 .font(.system(size: 13))
-                                .multilineTextAlignment(.leading)
+                                .foregroundColor(.primary)
+                        }.padding(.horizontal, 16)
+
+                        
+                        CodeDisplayComponent(code: booking.checkInCode ?? "XXXXXX")
+                        
+                        HStack {
+                            Button(action: {
+                                isPresented = true
+                            }) {
+                                HStack {
+                                    Text("Want to add this to iCal?")
+                                        .bold()
+                                        .foregroundColor(Color("Dark-Purple"))
+                                        .font(.system(size: 13))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(Color("Dark-Purple"))
+                            
+                                }
+                                .padding(.vertical, 18)
+                                .padding(.horizontal, 18)
+                                
+                            }
+                            .background(Color("Light-Purple").opacity(0.4))
+                            .cornerRadius(10)
+                            .padding(.horizontal, 16)
+                            
+                        }
+                        .sheet(isPresented: $isPresented) {
+                            CalendarQRView(booking: booking)
+                                .presentationDetents([.height(400)])
+                                .presentationCornerRadius(25)
                         }
                         
-                        Text("for future check-in to verify your attendance.")
-                            .font(.system(size: 13))
+                        HStack(alignment: .top) {
+                            Image(systemName: "info.circle")
+                                .resizable()
+                                .frame(width: 15, height: 15)
+                                .foregroundColor(.red)
+                                .offset(y: 3)
+                                .padding(.top,10)
+                            Text("Please note that late check-in will cause your booking to be cancelled.")
+                                .foregroundStyle(.black)
+                                .font(.system(size: 13))
+                                .multilineTextAlignment(.leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.top,10)
+                        }.padding(.horizontal, 16)
+                            .padding(.top, 12)
+                        
+                        Text("Booking Summary")
+                            .bold()
+                            .padding(.top, 24)
+                            .padding(.bottom,10)
+                            .font(.system(size: 15))
+                            .padding(.horizontal, 16)
+                        
+                        Divider()
+                            .background(.gray).padding(.horizontal, 16)
+                        
+                        Booking_Summary(booking:booking)
+                            .padding(.top, 10)
+                            .padding(.bottom, 90)
+                            .padding(.horizontal, 16)
                     }
                     
-                    CodeDisplayComponent(code: booking.checkInCode ?? "XXXXXX")
-                    
-                    HStack {
-                        Button(action: {
-                            isPresented = true
-                        }) {
-                            HStack {
-                                Spacer()
-                                Text("Want to add this to iCal?")
-                                    .bold()
-                                    .foregroundColor(Color(red: 127 / 255, green: 41 / 255, blue: 154 / 255))
-                                    .frame(width: 300, height: 50, alignment: .leading)
-                                    .font(.system(size: 13))
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
-                                Spacer()
-                            }
-                        }
-                        .background(Color(red: 250 / 255, green: 233 / 255, blue: 255 / 255))
-                        .frame(width: 370, height: 50)
-                        .cornerRadius(10)
-                        .opacity(0.6)
-                    }
-                    .sheet(isPresented: $isPresented) {
-                        CalendarQRView(booking: booking)
-                            .presentationDetents([.height(400)])
-                            .presentationCornerRadius(25)
-                    }
-                    
-                    HStack(alignment: .top) {
-                        Image(systemName: "info.circle")
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                            .foregroundColor(.red)
-                            .offset(y: 3)
-                            .padding(.top,10)
-                        Text("Please note that late check-in will cause your booking to be cancelled.")
-                            .foregroundStyle(.black)
-                            .font(.system(size: 13))
-                            .multilineTextAlignment(.leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.top,10)
-                    }
-                    
-                    Text("Booking Summary")
-                        .bold()
-                        .padding(.top, 15)
-                        .padding(.bottom,10)
-                        .font(.system(size: 15))
-                    
-                    Divider()
-                        .background(.black)
-                    
-                    Booking_Summary(booking:booking)
-                        .padding(.top, 10)
-                        .padding(.bottom, 90)
                 }
             }
             .overlay(alignment: .bottom) {
@@ -168,16 +171,12 @@ struct BookingSuccessView: View {
                             .foregroundColor(.white)
                             .font(.system(size: 18))
                             .background(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [Color("Purple"), Color("Medium-Purple")]),
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
+                                Color("Purple")
                             )
                             .cornerRadius(24)
                             .padding(.vertical, 8)
                         
-                    }   .frame(width: 400, height: 60)
+                    }   .frame(width: 400, height: 60).padding(.top, 16)
                     .background(.white)
 
             }

@@ -28,8 +28,7 @@ struct TimeslotComponent: View {
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(Color.gray, lineWidth: 1)
                     )
-            } else {
-                // Your unbooked styling stays the same
+            }else {
                 Text("\(timeslot.name)")
                     .font(.system(size: 11, weight: .medium))
                     .foregroundColor(Color("Dark-Purple"))
