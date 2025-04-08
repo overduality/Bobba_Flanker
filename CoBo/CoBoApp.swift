@@ -94,7 +94,7 @@ struct CoBoApp: App {
                 
                 let timeslotDescriptor = FetchDescriptor<Timeslot>()
                 let savedTimeslots = try context.fetch(timeslotDescriptor)
-                
+                // TODO: harus urutin time slot
                 let spaceDescriptor = FetchDescriptor<CollabSpace>()
                 let savedSpaces = try context.fetch(spaceDescriptor)
                 
@@ -105,7 +105,7 @@ struct CoBoApp: App {
                     purpose: BookingPurpose.groupDiscussion,
                     date: Date(),
                     participants: [],
-                    timeslot: savedTimeslots[5],
+                    timeslot: savedTimeslots[0],
                     collabSpace: savedSpaces[0],
                     status: BookingStatus.notCheckedIn,
                     checkInCode: "908724"
@@ -117,7 +117,7 @@ struct CoBoApp: App {
                     purpose: BookingPurpose.groupDiscussion,
                     date: Date(),
                     participants: [],
-                    timeslot: savedTimeslots[4],
+                    timeslot: savedTimeslots[1],
                     collabSpace: savedSpaces[1],
                     status: BookingStatus.notCheckedIn,
                     checkInCode: "908462"

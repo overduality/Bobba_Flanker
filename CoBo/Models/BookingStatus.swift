@@ -8,7 +8,7 @@
 import Foundation
 
 // TODO: Better case naming for BookingStatus
-enum BookingStatus: Codable {
+enum BookingStatus: String, Codable, Equatable{
     case checkedIn
     case notCheckedIn
     case closed

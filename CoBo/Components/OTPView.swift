@@ -3,7 +3,7 @@ import SwiftUI
 import Combine
 
 
-struct OTPFieldView: View {
+struct OTPFieldComponent: View {
     
     @FocusState private var pinFocusState: FocusPin?
     @Binding private var otp: String
@@ -101,19 +101,19 @@ struct OtpModifier: ViewModifier {
             )
     }
 }
-
-struct OTPFieldView_Previews: PreviewProvider {
-    
-    static var previews: some View {
-        
-        VStack(alignment: .leading, spacing: 8) {
-            Text("VERIFICATION CODE")
-                .foregroundColor(Color.gray)
-                .font(.system(size: 12))
-            OTPFieldView(numberOfFields: 6, otp: .constant(""))
-                .previewLayout(.sizeThatFits)
-        }
-    }
-}
+//
+//struct OTPFieldView_Previews: PreviewProvider {
+//    
+//    static var previews: some View {
+//        
+//        VStack(alignment: .leading, spacing: 8) {
+//            Text("VERIFICATION CODE")
+//                .foregroundColor(Color.gray)
+//                .font(.system(size: 12))
+//            OTPFieldView(numberOfFields: 6, otp: .constant(""))
+//                .previewLayout(.sizeThatFits)
+//        }
+//    }
+//}
 
 

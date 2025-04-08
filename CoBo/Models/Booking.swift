@@ -26,6 +26,18 @@ class Booking: Hashable {
         return nil
     }
     
+    func getStatus() -> String {
+        switch status {
+            case .checkedIn:
+                return "checkedIn"
+            case .notCheckedIn:
+                return "notCheckedIn"
+            case .closed:
+                return "closed"
+        }
+    }
+    
+
     init(name: String = "", coordinator: User? = nil, purpose: BookingPurpose? = nil, date: Date, participants: [User] = [], timeslot: Timeslot, collabSpace: CollabSpace, status: BookingStatus = .notCheckedIn, checkInCode: String = "") {
         self.name = name
         self.coordinator = coordinator
