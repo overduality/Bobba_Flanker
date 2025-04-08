@@ -1,21 +1,50 @@
+//
+//  QRCode.swift
+//  Project 1 Apple
+//
+//  Created by Rieno on 25/03/25.
+//
+
 import SwiftUI
 import UIKit
 import CoreImage.CIFilterBuiltins
 
 
-func generatePlaceholderQRCode() -> String {
+func generateQRCodeFromBooking(_ booking: Booking) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyyMMdd'T'HHmmss"
+    dateFormatter.timeZone = TimeZone(identifier: "Asia/Jakarta")
+    let calendar = Calendar(identifier: .gregorian)
+    
+    var startComponents = calendar.dateComponents([.year, .month, .day], from: booking.date)
+    startComponents.hour = Int(booking.timeslot.startHour)
+    startComponents.minute = Int((booking.timeslot.startHour.truncatingRemainder(dividingBy: 1)) * 60)
+    let startDate = calendar.date(from: startComponents)!
+
+    var endComponents = calendar.dateComponents([.year, .month, .day], from: booking.date)
+    endComponents.hour = Int(booking.timeslot.endHour)
+    endComponents.minute = Int((booking.timeslot.endHour.truncatingRemainder(dividingBy: 1)) * 60)
+    let endDate = calendar.date(from: endComponents)!
+
+    let startDateStr = dateFormatter.string(from: startDate)
+    let endDateStr = dateFormatter.string(from: endDate)
+
+    let meetingName = booking.name ?? "Meeting"
+    let meetingDescription = "Check-in Code: \(booking.checkInCode ?? "No Check-in Code")"
+    let organizerName = booking.coordinator?.name ?? "Unknown"
+    let organizerEmail = booking.coordinator?.email ?? "unknown@email.com"
+
     return """
     BEGIN:VCALENDAR
     VERSION:2.0
     PRODID:-//hacksw/handcal//NONSGML v1.0//EN
     BEGIN:VEVENT
-    UID:550e8400-e29b-41d4-a716-446655440000
-    DTSTART:20250327T051800Z
-    DTEND:20250327T052300Z
-    SUMMARY:Meeting Name (*)
-    DESCRIPTION: Code (*)
-    ORGANIZER;CN=Emmanuel Rieno:mailto:emmanuelbobba3@gmail.com
-    ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE;CN=Evan Lokajaya:mailto:lokajaya41D4@gmail.com
+    UID:\(UUID().uuidString)
+    DTSTART:\(startDateStr)
+    DTEND:\(endDateStr)
+    SUMMARY:\(meetingName)
+    DESCRIPTION:\(meetingDescription)
+    ORGANIZER;CN=\(organizerName):mailto:\(organizerEmail)
 
     BEGIN:VALARM
     ACTION:DISPLAY
@@ -34,6 +63,8 @@ func generatePlaceholderQRCode() -> String {
     """
 }
 
+
+
 func generateQRCode(from string: String) -> UIImage? {
     print("Generating QR Code for: \(string.prefix(50))...")
     
@@ -43,7 +74,7 @@ func generateQRCode(from string: String) -> UIImage? {
     filter.setValue("M", forKey: "inputCorrectionLevel")
 
     if let outputImage = filter.outputImage {
-        let transform = CGAffineTransform(scaleX: 10, y: 10) 
+        let transform = CGAffineTransform(scaleX: 10, y: 10)
         let scaledCIImage = outputImage.transformed(by: transform)
         
         let context = CIContext()
@@ -51,7 +82,7 @@ func generateQRCode(from string: String) -> UIImage? {
             return UIImage(cgImage: cgImage)
         }
     }
-    
+
     print("Failed to generate QR Code")
     return nil
 }
