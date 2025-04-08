@@ -1,13 +1,20 @@
+//
+//  CalendarQRView.swift
+//  Project 1 Apple
+//
+//  Created by Rieno on 25/03/25.
+//
 import SwiftUI
 import CoreImage.CIFilterBuiltins
 
 struct CalendarQRView: View {
     @Environment(\.dismiss) var dismiss
-    
+    let booking: Booking  // <-- Accept a booking instance
+
     var qrCodeText: String {
-        generatePlaceholderQRCode()
+        generateQRCodeFromBooking(booking)
     }
-    
+
     var body: some View {
         VStack {
             HStack {
@@ -37,13 +44,9 @@ event to your iCal and receive timely reminders.
                 Text("Failed to generate QR code")
                     .foregroundColor(.red)
             }
-            
+
             Spacer()
         }
         .padding()
     }
-}
-
-#Preview {
-    CalendarQRView()
 }

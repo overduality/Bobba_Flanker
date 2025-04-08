@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		666763CC2DA3D6A400A5F0B8 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 666763CB2DA3D6A400A5F0B8 /* ConfettiSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		7082F0FA2D9221FA00FD1178 /* CoBo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoBo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				666763CC2DA3D6A400A5F0B8 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = CoBo;
 			packageProductDependencies = (
+				666763CB2DA3D6A400A5F0B8 /* ConfettiSwiftUI */,
 			);
 			productName = CoBo;
 			productReference = 7082F0FA2D9221FA00FD1178 /* CoBo.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 7082F0F12D9221FA00FD1178;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				666763CA2DA3D6A400A5F0B8 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 7082F0FB2D9221FA00FD1178 /* Products */;
 			projectDirPath = "";
@@ -324,6 +333,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		666763CA2DA3D6A400A5F0B8 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		666763CB2DA3D6A400A5F0B8 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 666763CA2DA3D6A400A5F0B8 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7082F0F22D9221FA00FD1178 /* Project object */;
 }
