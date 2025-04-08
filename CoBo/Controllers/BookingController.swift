@@ -68,7 +68,28 @@ class BookingController {
             print("Error adding booking: \(error)")
         }
     }
-    
+    func cancelBooking(_ booking: Booking) -> Bool {
+        guard let context = modelContext else {
+            print("Model Context is Not Available : Cancel Booking")
+            return false
+        }
+        
+        guard booking.status != .canceled else {
+            print("Booking already canceled")
+            return false
+        }
+
+        booking.status = .canceled
+        do {
+            try context.save()
+            print("Booking successfully canceled.")
+            return true
+        } catch {
+            print("Failed to cancel booking: \(error)")
+            return false
+        }
+    }
+
     func checkInBooking(_ checkInCode: String) -> [String]? {
         guard let context = modelContext else {
             print("Model Context is Not Available")

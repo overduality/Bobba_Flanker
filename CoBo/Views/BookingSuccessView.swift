@@ -9,7 +9,6 @@ import SwiftUI
 struct BookingSuccessView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var navigationPath: NavigationPath
-    
     @State private var shadowRadius: CGFloat = 5
     @State private var isPresented = false
     @State var booking: Booking

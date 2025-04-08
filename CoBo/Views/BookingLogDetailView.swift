@@ -11,7 +11,8 @@ struct BookingLogDetailsView: View {
     @Environment(\.modelContext) var modelContext
     @Binding var navigationPath: NavigationPath
     var userController = UserController()
-    
+    var bookingController = BookingController()
+
     var booking: Booking
     
     var formattedDate: String {
