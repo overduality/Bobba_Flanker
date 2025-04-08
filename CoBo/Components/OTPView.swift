@@ -4,7 +4,6 @@ import Combine
 
 
 struct OTPFieldComponent: View {
-    
     @FocusState private var pinFocusState: FocusPin?
     @Binding private var otp: String
     @State private var pins: [String]
@@ -35,12 +34,9 @@ struct OTPFieldComponent: View {
                             if index < numberOfFields - 1 {
                                 pinFocusState = FocusPin.pin(index + 1)
                             } else {
-                                // Uncomment this if you want to clear focus after the last digit
-                                // pinFocusState = nil
                             }
                         }
                         else if newVal.count == numberOfFields, let intValue = Int(newVal) {
-                            // Pasted value
                             otp = newVal
                             updatePinsFromOTP()
                             pinFocusState = FocusPin.pin(numberOfFields - 1)
@@ -54,7 +50,6 @@ struct OTPFieldComponent: View {
                     }
                     .focused($pinFocusState, equals: FocusPin.pin(index))
                     .onTapGesture {
-                        // Set focus to the current field when tapped
                         pinFocusState = FocusPin.pin(index)
                     }
             }
@@ -62,6 +57,11 @@ struct OTPFieldComponent: View {
         .onAppear {
             // Initialize pins based on the OTP string
             updatePinsFromOTP()
+        }
+        .onChange(of: otp) { newValue in
+            if newValue.isEmpty {
+                pins = Array(repeating: "", count: numberOfFields)
+            }
         }
     }
     
@@ -103,9 +103,9 @@ struct OtpModifier: ViewModifier {
 }
 //
 //struct OTPFieldView_Previews: PreviewProvider {
-//    
+//
 //    static var previews: some View {
-//        
+//
 //        VStack(alignment: .leading, spacing: 8) {
 //            Text("VERIFICATION CODE")
 //                .foregroundColor(Color.gray)

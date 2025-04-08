@@ -39,11 +39,6 @@ struct CheckinView: View {
                     // OTP Component
                     VStack{
                         OTPFieldComponent(numberOfFields: numberOfFieldsInOTP, otp: $otp)
-                            .onChange(of: otp) { newOtp in
-                                if newOtp.count == numberOfFieldsInOTP {
-                                    
-                                }
-                            }
                             .focused($isTextFieldFocused)
                     }
                     .padding(.horizontal, 16)
@@ -101,6 +96,9 @@ struct CheckinView: View {
         }
         .onAppear(){
             bookingController.setupModelContext(self.modelContext)
+        }
+        .onDisappear {
+            otp = ""
         }
         
     }
