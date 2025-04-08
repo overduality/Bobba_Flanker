@@ -46,7 +46,6 @@ struct BookingSuccessView: View {
                         
                         Spacer()
                         
-                        // Decorative background circles
                         ZStack {
                             circleBGShape()
                                 .fill(
@@ -73,7 +72,7 @@ struct BookingSuccessView: View {
                                 .opacity(0.4)
                         }
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                    }
+                    } .padding(.bottom,-30)
                     
                     Text("Your booking has been placed!")
                         .bold()
@@ -157,7 +156,7 @@ struct BookingSuccessView: View {
                     
                     Booking_Summary(booking:booking)
                         .padding(.top, 10)
-                        .padding(.bottom, 90) // Add extra bottom padding so content doesn't hide behind the fixed button
+                        .padding(.bottom, 90)
                 }
             }
             .overlay(alignment: .bottom) {
