@@ -71,3 +71,4 @@ fastlane/test_output
 
 CoBo/TimeslotComponent.swift
 CoBo/Components/TimeslotComponent.swift
+/CoBo.xcodeproj
