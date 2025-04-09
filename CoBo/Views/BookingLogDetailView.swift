@@ -2,23 +2,23 @@
 //  BookingLogDetailsView.swift
 //  CoBo
 //
-//  Created by Evan Lokajaya on 07/04/25.
+//  Created by Rieno on 09/04/25.
 //
 
 import SwiftUI
 import Foundation
-
-import SwiftUI
-import Foundation
+import SwiftData
 
 struct BookingLogDetailsView: View {
     @Binding var navigationPath: NavigationPath
-    var booking: Booking
-    
+    @State var booking: Booking
+    @Environment(\.dismiss) var dismiss
     @State private var users: [User] = []
     @State private var showCancelSheet = false
     @State private var cancelCodeInput = ""
     @State private var cancelErrorMessage: String? = nil
+    @State private var showCancelButton = false
+    @State private var showSuccessAlert = false
     
     var userController = UserController()
     var bookingController = BookingController()
@@ -36,85 +36,109 @@ struct BookingLogDetailsView: View {
                     )
                     .frame(height: 120)
                     .ignoresSafeArea()
-                    // Header
+                    
+                    
                     VStack(alignment: .leading, spacing: 6) {
                         Spacer()
                         Text("📄 Booking Details")
                             .font(.title2).bold()
                         Spacer()
-                    }}.padding(.bottom,-20)
+                    }                .padding(.horizontal, 16)
+                    
+                }.alert("Booking Canceled", isPresented: $showSuccessAlert, actions: {}) {
+                    Text("Your booking has been successfully canceled.")
+                }
                 
                 
+                .padding(.bottom, 10)
+                Group {
+                    InfoRow(title: "Name", value: booking.name ?? "N/A")
+                    Divider()
+                    
+                    InfoRow(title: "Date", value: formattedDate(booking.date))
+                    Divider()
+                    
+                    InfoRow(title: "Timeslot", value: booking.timeslot.name)
+                    Divider()
+                    
+                    InfoRow(title: "Collab Space", value: booking.collabSpace.name)
+                    Divider()
+                    
+                    InfoRow(title: "Purpose", value: booking.purpose?.rawValue ?? "N/A")
+                    Divider()
+                    
+                    InfoRow(title: "Status", value: booking.getStatus())
+                    Divider()
+                    
+                    InfoRow(title: "Created At", value: formattedDateTime(booking.createdAt))
+                    Divider()
+                    
+                    InfoRow(title: "Coordinator", value: booking.coordinator?.name ?? "N/A")
+                    Divider()
+                    
+                    HStack(alignment: .top) {
+                        Text("Participants")
+                            .bold()
+                            .font(.system(size: 14))
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 4) {
+                            if booking.participants.isEmpty {
+                                Text("No participants inputted")
+                                    .font(.system(size: 13))
+                                    .multilineTextAlignment(.trailing)
+                            } else {
+                                ForEach(booking.participants, id: \.id) { participant in
+                                    Text(participant.name)
+                                        .font(.system(size: 13))
+                                        .multilineTextAlignment(.trailing)
+                                }
+                            }
+                        }
+                    }}
+                .padding(.horizontal, 16)
                 
-                InfoRow(title: "Name", value: booking.name ?? "N/A")
-                Divider()
-                
-                InfoRow(title: "Date", value: formattedDate(booking.date))
-                Divider()
-                
-                InfoRow(title: "Timeslot", value: booking.timeslot.name)
-                Divider()
-                
-                InfoRow(title: "Collab Space", value: booking.collabSpace.name)
-                Divider()
-                
-                InfoRow(title: "Purpose", value: booking.purpose?.rawValue ?? "N/A")
-                Divider()
-                
-                InfoRow(title: "Status", value: booking.getStatus())
-                
-                Divider()
-                InfoRow(title: "Created At", value: formattedDateTime(booking.createdAt))
-                Divider()
-                InfoRow(title: "Coordinator", value: booking.coordinator?.name ?? "N/A")
-                Divider()
-                
-                InfoRow(title: "Participants", value: booking.participants.map { $0.name }.joined(separator: ", "))
                 
                 Spacer()
             }
-            .padding(.horizontal, 16)
-            .ignoresSafeArea()
-            .safeAreaPadding()
-            
             
         }
-        Button(action: {
-            showCancelSheet = true
-        }) {
-            Text("Cancel Booking")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.white)
-                .padding(.vertical, 16)
-                .frame(maxWidth: .infinity)
-                .background(Color.red)
-                .cornerRadius(24)
-                .padding(.horizontal, 12)
-                .padding(.top, 12)
-        }
-        
-        .safeAreaPadding()
+        .toolbar(.hidden, for: .tabBar)
         .navigationTitle("Booking Details")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             userController.setupModelContext(modelContext)
-            users = userController.getAllUser()
-            
-            // 🧠 Add this:
             bookingController.setupModelContext(modelContext)
+            users = userController.getAllUser()
+            showCancelButton = booking.status == .notCheckedIn
+            
+            
         }
-
         .sheet(isPresented: $showCancelSheet) {
             CancelBookingSheet(
                 codeInput: $cancelCodeInput,
                 errorMessage: $cancelErrorMessage,
-                onConfirm: {
-                    validateCancelCode()
-                }
+                onConfirm: validateCancelCode
             )
         }
         
+        if showCancelButton {
+            Button(action: {
+                showCancelSheet = true
+            }) {
+                Text("Cancel Booking")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                    .padding(.vertical, 16)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.red)
+                    .cornerRadius(24)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 12)
+            }
+        }
+        
     }
+    
     
     func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
@@ -128,39 +152,68 @@ struct BookingLogDetailsView: View {
         formatter.timeStyle = .short
         return formatter.string(from: date)
     }
-    
     func validateCancelCode() {
-        if cancelCodeInput == booking.checkInCode {
-            if bookingController.cancelBooking(booking) {
-                showCancelSheet = false
-                cancelErrorMessage = nil
-            } else {
-                cancelErrorMessage = "Failed to cancel booking. Please try again."
-            }
-                
-        } else {
+        guard cancelCodeInput == booking.checkInCode else {
             cancelErrorMessage = "Invalid check-in code. Please try again."
+            return
+        }
+        
+        let success = bookingController.cancelBooking(booking)
+        
+        if success {
+            cancelErrorMessage = nil
+            showCancelSheet = false
+            showCancelButton = false
+            
+            let bookingID = booking.id
+            let fetchDescriptor = FetchDescriptor<Booking>(predicate: #Predicate {
+                $0.id == bookingID
+            })
+
+            
+            if let updated = try? modelContext.fetch(fetchDescriptor).first {
+                booking = updated
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                showSuccessAlert = true
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    showSuccessAlert = false
+                    dismiss()
+                }
+            }
+            
+        } else {
+            cancelErrorMessage = "Failed to cancel booking. Please try again."
         }
     }
-
+}
     
     
-    
+    // MARK: - InfoRow
     struct InfoRow: View {
         var title: String
         var value: String
         
         var body: some View {
             HStack(alignment: .top) {
-                Text("\(title):")
+                Text(title)
                     .bold()
+                    .font(.system(size: 14))
                 Spacer()
                 Text(value)
+                    .font(.system(size: 13))
                     .multilineTextAlignment(.trailing)
+                    .lineLimit(nil)
+                
+                    .fixedSize(horizontal: false, vertical: true)
+                
             }
         }
     }
     
+    // MARK: - CancelBookingSheet
     struct CancelBookingSheet: View {
         @Binding var codeInput: String
         @Binding var errorMessage: String?
@@ -181,11 +234,7 @@ struct BookingLogDetailsView: View {
                             CodeBox(index: index, code: $codeInput)
                                 .focused($focusedField, equals: index)
                                 .onChange(of: codeInput) { _ in
-                                    if codeInput.count < 6 {
-                                        focusedField = codeInput.count
-                                    } else {
-                                        focusedField = nil
-                                    }
+                                    focusedField = codeInput.count < 6 ? codeInput.count : nil
                                 }
                         }
                     }
@@ -206,21 +255,18 @@ struct BookingLogDetailsView: View {
                             .background(Color.red)
                             .cornerRadius(12)
                     }
-                    .padding(.top, 10)
                     
                     Spacer()
                 }
                 .padding()
                 .navigationTitle("Cancel Booking")
                 .navigationBarTitleDisplayMode(.inline)
-                .onAppear {
-                    focusedField = 0
-                }
+                .onAppear { focusedField = 0 }
             }
         }
     }
     
-    
+    // MARK: - CodeBox
     struct CodeBox: View {
         let index: Int
         @Binding var code: String
@@ -263,12 +309,12 @@ struct BookingLogDetailsView: View {
             }
         }
     }
-}
+    
     #Preview {
         let navigationPath = NavigationPath()
         if let booking = DataManager.getBookingData().first {
-            return BookingLogDetailsView(navigationPath: .constant(navigationPath), booking: booking)
+            BookingLogDetailsView(navigationPath: .constant(navigationPath), booking: booking)
         } else {
-            return AnyView(Text("No booking data available."))
+            AnyView(Text("No booking data available."))
         }
     }
