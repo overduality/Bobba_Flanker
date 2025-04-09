@@ -68,24 +68,24 @@ class BookingController {
             print("Error adding booking: \(error)")
         }
     }
-    func cancelBooking(_ booking: Booking) -> Bool {
+    func cancelBooking(_ booking: Booking, reason: String? = nil) -> Bool {
         guard let context = modelContext else {
             print("Model Context is Not Available : Cancel Booking")
             return false
         }
-        
+
         guard booking.status != .canceled else {
             print("Booking already canceled")
             return false
         }
-
         booking.status = .canceled
+
         do {
             try context.save()
-            print("Booking successfully canceled.")
+            print("Booking successfully canceled and logged.")
             return true
         } catch {
-            print("Failed to cancel booking: \(error)")
+            print("Failed to save canceled booking: \(error)")
             return false
         }
     }

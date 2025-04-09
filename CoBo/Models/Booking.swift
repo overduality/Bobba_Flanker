@@ -33,7 +33,7 @@ class Booking: Hashable {
         case .checkedIn:
             return "Checked in"
         case .canceled:
-            return "Cancelled"
+            return "Canceled"
         default:
             return "Unknown"
         }

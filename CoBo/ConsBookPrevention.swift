@@ -8,36 +8,32 @@
 import Foundation
 
 final class BookingValidator {
-    
     static func isBookingValid(newBooking: Booking, existingBookings: [Booking]) -> Bool {
-        // new booking's time range
-        let newStart = newBooking.timeslot.startHour
-        let newEnd = newBooking.timeslot.endHour
-        
-        // safely unwrap newBooking.coordinator
         guard let newCoordinator = newBooking.coordinator else {
             return false
         }
 
-        // check for consecutive bookings using loop
+        let newStart = newBooking.timeslot.startHour
+        let newEnd = newBooking.timeslot.endHour
+
         for booking in existingBookings {
             guard let existingCoordinator = booking.coordinator else {
-                continue // skip this booking if coordinator is missing
+                continue
             }
 
             if existingCoordinator.email == newCoordinator.email {
                 let existingStart = booking.timeslot.startHour
                 let existingEnd = booking.timeslot.endHour
 
-                let isConsecutiveBefore = newEnd == existingStart
-                let isConsecutiveAfter = newStart == existingEnd
+                let isOverlapping = newStart < existingEnd && newEnd > existingStart
+                let isConsecutive = newEnd == existingStart || newStart == existingEnd
 
-                if isConsecutiveBefore || isConsecutiveAfter {
+                if isOverlapping || isConsecutive {
                     return false
                 }
             }
         }
-        
+
         return true
     }
 }
