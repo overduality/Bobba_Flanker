@@ -60,7 +60,7 @@ struct TimeslotManager : View{
         return bookings.contains { booking in
             _ = calendar.startOfDay(for: booking.date)
             return isSameDay(date1: booking.date, date2: selectedDate) &&
-            isSameCollabSpace(collabSpace1: booking.collabSpace, collabSpace2: collabSpace) && isSameTimeslot(timeslot1: booking.timeslot, timeslot2: timeslot) && booking.status != BookingStatus.closed
+            isSameCollabSpace(collabSpace1: booking.collabSpace, collabSpace2: collabSpace) && isSameTimeslot(timeslot1: booking.timeslot, timeslot2: timeslot) && booking.status != BookingStatus.closed && booking.status != BookingStatus.canceled
         }
     }
     func isSameDay(date1: Date, date2: Date) -> Bool {
