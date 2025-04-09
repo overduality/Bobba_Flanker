@@ -239,12 +239,14 @@ struct CancelBookingSheet: View {
 
                 Button(action: onConfirm) {
                     Text("Confirm Cancel")
-                        .font(.headline)
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.white)
-                        .padding()
+                        .padding(.vertical, 16)
                         .frame(maxWidth: .infinity)
                         .background(Color.red)
-                        .cornerRadius(12)
+                        .cornerRadius(24)
+                        .padding(.horizontal, 12)
+                        .padding(.top, 12)
                 }
 
                 Spacer()
