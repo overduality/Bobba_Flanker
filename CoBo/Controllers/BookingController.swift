@@ -170,4 +170,55 @@ class BookingController {
         
         return ["Not within check-in time ⏳", "You can check-in for your booking at \(bookingFetched.collabSpace.name) on \(formattedDate), at \(bookingFetched.timeslot.startCheckIn) - \(bookingFetched.timeslot.endCheckIn)."]
     }
+    
+    func autoCloseBooking() {
+        guard let context = modelContext else {
+            print("Model Context is Not Available : Auto Close Booking")
+            return
+        }
+        let calendar = Calendar.current
+        
+        let date = Date()
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        
+        let predicate = #Predicate<Booking> { booking in
+            booking.date >= startOfDay && booking.date < endOfDay
+        }
+        var descriptor = FetchDescriptor<Booking>()
+        descriptor.predicate = predicate
+            
+        do {
+            let bookings = try context.fetch(descriptor)
+            let now = Date()
+            
+            for booking in bookings {
+                if booking.status == BookingStatus.notCheckedIn {
+                    let endCheckIn = booking.timeslot.endCheckIn
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "HH:mm"
+                    
+                    if let endTime = formatter.date(from: endCheckIn) {
+                        let endTimeComponents = calendar.dateComponents([.hour, .minute], from: endTime)
+                        
+                        var endDateComponents = calendar.dateComponents([.year, .month, .day], from: date)
+                        endDateComponents.hour = endTimeComponents.hour
+                        endDateComponents.minute = endTimeComponents.minute
+                        
+                        if let endDate = calendar.date(from: endDateComponents) {
+                            if now > endDate {
+                                booking.status = BookingStatus.closed
+                            }
+                        }
+                    }
+                }
+            }
+            
+            try context.save()
+        } catch {
+            print("Error auto close booking: \(error)")
+            return
+        }
+        
+    }
 }

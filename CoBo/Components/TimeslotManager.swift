@@ -40,6 +40,7 @@ struct TimeslotManager : View{
     private func getTimeslotStatus(timeslot: Timeslot) -> Bool {
         let bookingController = BookingController()
         bookingController.setupModelContext(modelContext)
+        bookingController.autoCloseBooking()
         let bookings: [Booking] = bookingController.getAllBooking()
         let calendar = Calendar.current
         

@@ -51,7 +51,7 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                             .foregroundStyle(Color.darkPurple)
                     }
-                    .frame(width: .infinity, height: 10)
+                    .frame(maxWidth: .infinity, maxHeight: 10)
                     .padding()
                     .background(Color.clear)
                     .border(lightGrayColor)
