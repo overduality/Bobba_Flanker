@@ -84,6 +84,7 @@ struct BookingLogView: View {
         }
         .onAppear() {
             bookingController.setupModelContext(modelContext)
+            bookingController.autoCloseBooking()
             bookings = bookingController.getBookingsByDate(selectedDate)
         }
         .onChange(of: selectedDate) { oldValue, newValue in
