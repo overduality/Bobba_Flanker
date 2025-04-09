@@ -1,12 +1,12 @@
 //
-//  BookingSuccessView.swift
-//  Project 1 Apple
+//  BookingSuccessAutoCI.swift
+//  CoBo
 //
-//  Created by Rieno on 25/03/25.
+//  Created by Amanda on 09/04/25.
 //
 import SwiftUI
 
-struct BookingSuccessView: View {
+struct BookingSuccessAutoCIView : View{
     @Environment(\.dismiss) private var dismiss
     @Binding var navigationPath: NavigationPath
     @State private var shadowRadius: CGFloat = 5
@@ -23,7 +23,7 @@ struct BookingSuccessView: View {
         return "\(weekdayFormatter.string(from: booking.date)), \(dateFormatter.string(from: booking.date))"
     }
     
-    var body: some View {
+    var body: some View{
         ScrollView {
             VStack(alignment: .leading) {
                 HStack {
@@ -79,73 +79,16 @@ struct BookingSuccessView: View {
                             .bold()
                             .font(.system(size: 17))
                         
-                        Text("Now save this code.")
+                        Text("You can proceed to use the space now.")
                             .bold()
                             .padding(.bottom, 10)
                             .font(.system(size: 17))
                         
-                        Text("This code won't be shown again. ")
-                            .font(.system(size: 13))
-                            .foregroundColor(Color(red: 127 / 255, green: 41 / 255, blue: 154 / 255))
-                            .italic()
-                            .bold()
-                        +
-                        Text("Save this 6-digit code for future check-in to verify your attendance.")
-                            .font(.system(size: 13))
-                            .foregroundColor(.primary)
                     }.padding(.horizontal, 16)
-                    
-                    
-                    CodeDisplayComponent(code: booking.checkInCode ?? "XXXXXX")
-                    
-                    HStack {
-                        Button(action: {
-                            isPresented = true
-                        }) {
-                            HStack {
-                                Text("Want to add this to iCal?")
-                                    .bold()
-                                    .foregroundColor(Color("Dark-Purple"))
-                                    .font(.system(size: 13))
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(Color("Dark-Purple"))
-                                
-                            }
-                            .padding(.vertical, 18)
-                            .padding(.horizontal, 18)
-                            
-                        }
-                        .background(Color("Light-Purple").opacity(0.4))
-                        .cornerRadius(10)
-                        .padding(.horizontal, 16)
-                        
-                    }
-                    .sheet(isPresented: $isPresented) {
-                        CalendarQRView(booking: booking)
-                            .presentationDetents([.height(400)])
-                            .presentationCornerRadius(25)
-                    }
-                    
-                    HStack(alignment: .top) {
-                        Image(systemName: "info.circle")
-                            .resizable()
-                            .frame(width: 15, height: 15)
-                            .foregroundColor(.red)
-                            .offset(y: 3)
-                            .padding(.top,10)
-                        Text("Please note that late check-in will cause your booking to be cancelled.")
-                            .foregroundStyle(.black)
-                            .font(.system(size: 13))
-                            .multilineTextAlignment(.leading)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.top,10)
-                    }.padding(.horizontal, 16)
-                        .padding(.top, 12)
-                    
+
                     Text("Booking Summary")
                         .bold()
-                        .padding(.top, 24)
+                        .padding(.top, 16)
                         .padding(.bottom,10)
                         .font(.system(size: 15))
                         .padding(.horizontal, 16)
@@ -182,13 +125,11 @@ struct BookingSuccessView: View {
         .safeAreaPadding()
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .tabBar)
-        
     }
 }
-
 
 #Preview {
     let navigationPath = NavigationPath()
     let booking = DataManager.getBookingData().first!
-    BookingSuccessView(navigationPath: .constant(navigationPath), booking: booking)
+    BookingSuccessAutoCIView(navigationPath: .constant(navigationPath), booking: booking)
 }

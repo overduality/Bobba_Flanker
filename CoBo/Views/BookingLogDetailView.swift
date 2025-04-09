@@ -68,11 +68,12 @@ struct BookingLogDetailsView: View {
                 InfoRow(title: "Coordinator", value: booking.coordinator?.name ?? "N/A")
                 Divider()
 
-                InfoRow(title: "Participants", value: booking.participants.map { $0.name }.joined(separator: ", "))
+                InfoRow(title: "Participants", value: booking.participants.count == 0 ? "No participants inputted" : booking.participants.map { $0.name }.joined(separator: ", "))
 
                 Spacer()
             }
-            .padding(.horizontal)                   .ignoresSafeArea()
+            .padding(.horizontal, 16)
+            .ignoresSafeArea()
             .safeAreaPadding()
             
 
@@ -137,11 +138,12 @@ struct InfoRow: View {
 
     var body: some View {
         HStack(alignment: .top) {
-            Text("\(title):")
-                .bold()
+            Text("\(title)")
+                .bold().font(.system(size: 14))
             Spacer()
             Text(value)
                 .multilineTextAlignment(.trailing)
+                .font(.system(size: 13))
         }
     }
 }

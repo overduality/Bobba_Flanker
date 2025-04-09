@@ -43,18 +43,34 @@ struct BookingLogView: View {
                     }
                     VStack(alignment: .leading){
                         Text("Booking Logs").font(.system(size: 14)).fontWeight(.medium)
-                        ScrollView {
+                        if(bookings.count == 0){
                             VStack {
-                                ForEach(bookings) { booking in
-                                    BookingLogCardComponent(booking: booking)
-                                        .padding(.vertical)
-                                        .onTapGesture { CGPoint in
-                                            navigationPath.append(BookingLogDetailContext(booking: booking))
-                                        }
+                                Spacer()
+                                VStack {
+                                    Image("no-booking-found")
+                                        .foregroundColor(.red)
+                                        .font(.system(size: 40))
+                                    Text("No bookings found").font(.system(size: 13)).foregroundColor(.gray).padding(.top, 4)
                                 }
-                                
+                                Spacer()
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+                        }else{
+                            ScrollView {
+                                VStack {
+                                    ForEach(bookings) { booking in
+                                        BookingLogCardComponent(booking: booking)
+                                            .padding(.vertical)
+                                            .onTapGesture { CGPoint in
+                                                navigationPath.append(BookingLogDetailContext(booking: booking))
+                                            }
+                                    }
+                                    
+                                }
                             }
                         }
+                        
                     }
                     
                 }
