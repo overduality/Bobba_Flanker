@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UIKit
 import CoreImage.CIFilterBuiltins
 
 
@@ -69,25 +68,16 @@ func generateQRCodeFromBooking(_ booking: Booking) -> String {
 }
 
 
-func generateQRCode(from string: String) -> UIImage? {
-    print("Generating QR Code for: \(string.prefix(50))...")
-    
+func generateQRCode(from string: String) -> Image? {
     let data = string.data(using: .utf8)
     let filter = CIFilter.qrCodeGenerator()
     filter.setValue(data, forKey: "inputMessage")
     filter.setValue("M", forKey: "inputCorrectionLevel")
-
-    if let outputImage = filter.outputImage {
-        let transform = CGAffineTransform(scaleX: 10, y: 10)
-        let scaledCIImage = outputImage.transformed(by: transform)
-        
-        let context = CIContext()
-        if let cgImage = context.createCGImage(scaledCIImage, from: scaledCIImage.extent) {
-            return UIImage(cgImage: cgImage)
-        }
+    let context = CIContext()
+    if let outputImage = filter.outputImage?.transformed(by: CGAffineTransform(scaleX: 10, y: 10)),
+       let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+        return Image(decorative: cgImage, scale: 1)
     }
-
     print("Failed to generate QR Code")
     return nil
 }
-    
