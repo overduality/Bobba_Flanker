@@ -21,7 +21,9 @@ class UserController {
             return []
         }
         
-        let descriptor = FetchDescriptor<User>()
+        var descriptor = FetchDescriptor<User>()
+        descriptor.sortBy = [SortDescriptor(\User.name, order: .forward)]
+        
         do {
             return try context.fetch(descriptor)
         } catch {
