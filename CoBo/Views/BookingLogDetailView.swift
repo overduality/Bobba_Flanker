@@ -18,6 +18,7 @@ struct BookingLogDetailsView: View {
     @State private var users: [User] = []
     @State private var showCancelSheet = false
     @State private var cancelCodeInput = ""
+    @State var showCancelButton = false
 
     var userController = UserController()
     var bookingController = BookingController()
@@ -76,20 +77,21 @@ struct BookingLogDetailsView: View {
             .ignoresSafeArea()
             .safeAreaPadding()
             
-
-        }
-        Button(action: {
-            showCancelSheet = true
-        }) {
-            Text("Cancel Booking")
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(.white)
-                .padding(.vertical, 16)
-                .frame(maxWidth: .infinity)
-                .background(Color.red)
-                .cornerRadius(24)
-                .padding(.horizontal, 12)
-                .padding(.top, 12)
+            if showCancelButton {
+                Button(action: {
+                    showCancelSheet = true
+                }) {
+                    Text("Cancel Booking")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.white)
+                        .padding(.vertical, 16)
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .cornerRadius(24)
+                        .padding(.horizontal, 12)
+                        .padding(.top, 12)
+                }
+            }
         }
 
         .safeAreaPadding()
@@ -98,6 +100,13 @@ struct BookingLogDetailsView: View {
         .onAppear {
             userController.setupModelContext(modelContext)
             users = userController.getAllUser()
+            
+            if booking.status == .notCheckedIn {
+                showCancelButton = true
+            }
+            else {
+                showCancelButton = false
+            }
         }
         .sheet(isPresented: $showCancelSheet) {
             CancelBookingSheet(codeInput: $cancelCodeInput, onConfirm: {
