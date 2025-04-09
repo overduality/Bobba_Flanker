@@ -13,6 +13,7 @@ struct CoBoApp: App {
     var body: some Scene {
         WindowGroup {
             SplashscreenView()
+                .preferredColorScheme(.light)
         }
         .modelContainer(for: [Booking.self, CollabSpace.self, Timeslot.self, User.self]) { result in
             do {
