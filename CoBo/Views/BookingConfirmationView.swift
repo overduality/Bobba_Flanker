@@ -130,8 +130,12 @@ struct BookingConfirmationView: View {
         .navigationTitle("Booking Confirmation")
         .navigationBarTitleDisplayMode(.inline)
         .navigationDestination(for: BookingSuccessContext.self) { context in
-            // TODO: If the booking is auto checkin then it will show different success view. There is isAutoCheckIn in context
-            BookingSuccessView(navigationPath: $navigationPath, booking: context.booking)
+            if context.isAutoCheckIn {
+                BookingSuccessAutoCIView(navigationPath: $navigationPath, booking: context.booking)
+            }
+            else {
+                BookingSuccessView(navigationPath: $navigationPath, booking: context.booking)
+            }
         }
         .onAppear() {
             bookingController.setupModelContext(modelContext)
