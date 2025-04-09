@@ -61,7 +61,7 @@ func generateQRCodeFromBooking(_ booking: Booking) -> String {
     BEGIN:VALARM
     ACTION:DISPLAY
     DESCRIPTION:Follow-up for \(meetingName)
-    TRIGGER;RELATED=END:PT60M
+    TRIGGER;RELATED=END:-PT60M
     END:VALARM
     END:VEVENT
     END:VCALENDAR
