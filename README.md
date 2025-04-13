@@ -1,4 +1,5 @@
 <img src="cobo-icon.png" alt="icon" width="100" height="100">
+
 # CoBo - Collab Space Booking App
 
 Made by: **Evan**, **Amanda**, **Bobba**
