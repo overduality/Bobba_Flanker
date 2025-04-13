@@ -28,6 +28,7 @@ Through concept testing, we found that CoBo’s design effectively addressed exi
 - Added a **Cancel** feature to give users more control over their reservations
 
 These improvements led us into the high-fidelity design phase and significantly improved the user experience.
+![hi-fi](image.png)
 
 ---
 
