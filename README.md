@@ -1,3 +1,4 @@
+![icon](cobo-icon.png)
 # CoBo - Collab Space Booking App
 
 Made by: **Evan**, **Amanda**, **Bobba**
@@ -16,6 +17,7 @@ To explore existing problems, we conducted observations and interviews with pote
 
 To better understand user behavior, we interviewed current users as well as an alumnus, gaining insights into how the space was previously used. These findings helped us identify recurring pain points and allowed us to prioritize features that would offer the most impact in solving them.
 
+![concept](cobo-concept.png)
 ---
 
 ## 🧠 Designing User Flow, LoFi, and HiFi
@@ -42,3 +44,10 @@ We implemented the **MVC (Model-View-Controller)** architecture for a clean and 
 - **CoreImage**: Used to generate **QR codes** that include iCal-compatible event details.
 - **iCal Integration**: Allows users to add bookings to their calendar.
 - **SwiftData**: Logs booking activity, collab space, and users.
+
+Here's a visual of our ERD:
+![erd](cobo-erd.png)
+
+---
+A heartfelt thank you to our mentor, Ko Wil, for consistently checking in and supporting us throughout the process. We also extend our gratitude to all the mentors and learners who shared their insights with us through interviews and concept testing!
+
