@@ -4,31 +4,38 @@
 //
 //  Created by Rieno on 07/04/25.
 //
-
 import Foundation
-
 final class BookingValidator {
     static func isBookingValid(newBooking: Booking, existingBookings: [Booking]) -> Bool {
         guard let newCoordinator = newBooking.coordinator else {
             return false
         }
 
-        let newStart = newBooking.timeslot.startHour
-        let newEnd = newBooking.timeslot.endHour
+        let calendar = Calendar.current
+        let timeslotList = DataManager.getTimeslotsData()
+
+        guard let newIndex = timeslotList.firstIndex(where: { ts in
+            abs(ts.startHour - newBooking.timeslot.startHour) < 0.01 &&
+            abs(ts.endHour - newBooking.timeslot.endHour) < 0.01
+        }) else {
+            return false
+        }
 
         for booking in existingBookings {
-            guard let existingCoordinator = booking.coordinator else {
-                continue
-            }
+            guard let existingCoordinator = booking.coordinator else { continue }
 
-            if existingCoordinator.email == newCoordinator.email {
-                let existingStart = booking.timeslot.startHour
-                let existingEnd = booking.timeslot.endHour
+            let sameCoordinator = existingCoordinator.email == newCoordinator.email
+            let sameDay = calendar.isDate(booking.date, inSameDayAs: newBooking.date)
+            let sameSpace = booking.collabSpace.id == newBooking.collabSpace.id
 
-                let isOverlapping = newStart < existingEnd && newEnd > existingStart
-                let isConsecutive = newEnd == existingStart || newStart == existingEnd
+            if sameCoordinator && sameDay && sameSpace {
+                guard let existingIndex = timeslotList.firstIndex(where: { ts in
+                    abs(ts.startHour - booking.timeslot.startHour) < 0.01 &&
+                    abs(ts.endHour - booking.timeslot.endHour) < 0.01
+                }) else { continue }
 
-                if isOverlapping || isConsecutive {
+                // ❗️Only block if they're directly adjacent (consecutive)
+                if abs(newIndex - existingIndex) == 1 {
                     return false
                 }
             }

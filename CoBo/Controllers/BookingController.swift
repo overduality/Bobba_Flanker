@@ -61,13 +61,21 @@ class BookingController {
             return
         }
         
-        do {
-            context.insert(booking)
-            try context.save()
-        } catch {
-            print("Error adding booking: \(error)")
+        let existingBookings = getAllBooking()
+        
+        if BookingValidator.isBookingValid(newBooking: booking, existingBookings: existingBookings) {
+            do {
+                context.insert(booking)
+                try context.save()
+                print("Booking successfully added.")
+            } catch {
+                print("Error adding booking: \(error)")
+            }
+        } else {
+            print("Invalid booking:  consecutive with existing booking.")
         }
     }
+
     func cancelBooking(_ booking: Booking, reason: String? = nil) -> Bool {
         guard let context = modelContext else {
             print("Model Context is Not Available : Cancel Booking")

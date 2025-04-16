@@ -11,6 +11,8 @@ import SwiftData
 struct BookingFormView: View {
     @Environment(\.modelContext) var modelContext
     @Binding var navigationPath: NavigationPath
+    @State private var showConflictAlert: Bool = false
+    @State private var conflictMessage: String = ""
     
     let bookingDate: Date
     let timeslot: Timeslot
@@ -73,12 +75,38 @@ struct BookingFormView: View {
                 
                 SearchableDropdownComponent(selectedItem: $bookingCoordinator, data: users)
                     .onChange(of: bookingCoordinator) { oldValue, newValue in
-                            if let coordinatorName = newValue?.name {
-                                meetingName = "\(coordinatorName)'s Meeting"
-                            } else {
-                                meetingName = ""
+                        if let coordinator = newValue {
+                            meetingName = "\(coordinator.name)'s Meeting"
+                            
+                            let newBooking = Booking(
+                                name: meetingName,
+                                coordinator: coordinator,
+                                purpose: bookingPurpose ?? .others, // default to .other if nil
+                                date: bookingDate,
+                                participants: selectedItems,
+                                timeslot: timeslot,
+                                collabSpace: collabSpace,
+                                status: .notCheckedIn,
+                                checkInCode: generateCode()
+                            )
+                            
+                            let bookingController = BookingController()
+                            bookingController.setupModelContext(modelContext)
+                            let existingBookings = bookingController.getAllBooking()
+                            
+                            let isValid = BookingValidator.isBookingValid(newBooking: newBooking, existingBookings: existingBookings)
+                            
+                            if !isValid {
+                                conflictMessage = "You already have a booking that overlaps or is directly next to this timeslot. Please choose another Collab Space or timeslot."
+                                showConflictAlert = true
+                                bookingCoordinator = nil
+                                meetingName = "" 
                             }
+                        } else {
+                            meetingName = ""
                         }
+                    }
+                
                 
                 HStack{
                     Text("Meeting's Name").font(.system(size: 14, weight: .medium))
@@ -123,16 +151,25 @@ struct BookingFormView: View {
                         .padding(.horizontal, 12)
                         .padding(.top, 12)
                 }
-              
+                
                 
             }
             .padding(.horizontal)
-    }
+        }
         .safeAreaPadding()
         .alert(isPresented: $showAlert) {
             let emptyFields = emptyFields.joined(separator: ", ")
             let message = "Please fill in the following fields: \(emptyFields)"
             return Alert(title: Text("Required Fields"), message: Text(message), dismissButton: .default(Text("OK")))
+        }
+        .alert(isPresented: $showConflictAlert) {
+            Alert(
+                title: Text("Consecutive Booking Detected"),
+                message: Text(conflictMessage),
+                dismissButton: .default(Text("OK"))
+            )
+            
+            
         }
         .navigationTitle("Booking Form")
         .navigationBarTitleDisplayMode(.inline)
@@ -187,7 +224,7 @@ struct BookingFormView: View {
         else {
             showAlert = true
         }
-                
+        
     }
     
     func generateCode() -> String {
