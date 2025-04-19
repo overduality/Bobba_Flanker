@@ -14,7 +14,7 @@ struct BookingLogView: View {
     @State private var navigationPath = NavigationPath()
     
     var bookingController = BookingController()
-    
+    @State private var isLoading: Bool = false
     @State var bookings: [Booking] = []
     
     var body: some View {
@@ -43,7 +43,16 @@ struct BookingLogView: View {
                     }
                     VStack(alignment: .leading){
                         Text("Booking Logs").font(.system(size: 14)).fontWeight(.medium)
-                        if(bookings.count == 0){
+                        if isLoading {
+                            ScrollView {
+                                VStack(spacing: 16) {
+                                    ForEach(0..<3, id: \.self) { _ in
+                                        BookingLogSkeletonCard()
+                                    }
+                                }
+                                .padding(.vertical)
+                            }
+                        } else if (bookings.count == 0){
                             VStack {
                                 Spacer()
                                 VStack {
@@ -55,24 +64,21 @@ struct BookingLogView: View {
                                 Spacer()
                             }
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                        }else{
+                            
+                        } else {
                             ScrollView {
                                 VStack {
                                     ForEach(bookings) { booking in
                                         BookingLogCardComponent(booking: booking)
                                             .padding(.vertical)
-                                            .onTapGesture { CGPoint in
+                                            .onTapGesture {
                                                 navigationPath.append(BookingLogDetailContext(booking: booking))
                                             }
                                     }
-                                    
                                 }
                             }
                         }
-                        
                     }
-                    
                 }
                 .safeAreaPadding()
                 .padding(.horizontal, 16)
@@ -88,8 +94,61 @@ struct BookingLogView: View {
             bookings = bookingController.getBookingsByDate(selectedDate)
         }
         .onChange(of: selectedDate) { oldValue, newValue in
-            bookings = bookingController.getBookingsByDate(newValue)
+            isLoading = true
+            bookings = []
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                bookings = bookingController.getBookingsByDate(newValue)
+                isLoading = false
+            }
         }
+    }
+}
+
+private struct BookingLogSkeletonCard: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            SkeletonView(RoundedRectangle(cornerRadius: 6))
+                .font(.system(size: 14))
+                .frame(height: 18)
+                .padding(.bottom, 8)
+            Divider()
+            HStack{
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width:60)
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width:80)
+
+            }
+            HStack{
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width:60)
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width:120)
+
+            }
+            HStack{
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width:60)
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width:120)
+
+            }
+            SkeletonView(RoundedRectangle(cornerRadius: 6))
+                .frame(width:60)
+            
+            HStack{
+                SkeletonView(RoundedRectangle(cornerRadius: 12))
+                    .frame(width:93, height: 36)
+                Spacer()
+                SkeletonView(RoundedRectangle(cornerRadius: 0))
+                    .frame(width: 140, height: 35, alignment: .trailing)
+            }
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(12)
+        .shadow(radius: 1)
+        .redacted(reason: .placeholder)
     }
 }
 
