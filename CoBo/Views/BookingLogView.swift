@@ -109,7 +109,7 @@ struct BookingLogView: View {
         }
         .onAppear() {
             bookingController.setupModelContext(modelContext)
-            bookingController.autoCloseBooking()
+            bookingController.autoCloseBooking(appSettings: settings)
             let rawBookings = bookingController.getBookingsByDate(selectedDate)
             bookings = SortBooking.sortBookings(rawBookings)
         }
