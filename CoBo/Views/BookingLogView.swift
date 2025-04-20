@@ -109,13 +109,16 @@ struct BookingLogView: View {
         .onAppear() {
             bookingController.setupModelContext(modelContext)
             bookingController.autoCloseBooking()
-            bookings = bookingController.getBookingsByDate(selectedDate)
+            let rawBookings = bookingController.getBookingsByDate(selectedDate)
+            bookings = SortBooking.sortBookings(rawBookings)
         }
+
         .onChange(of: selectedDate) { oldValue, newValue in
             isLoading = true
             bookings = []
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                bookings = bookingController.getBookingsByDate(newValue)
+                let rawBookings = bookingController.getBookingsByDate(newValue)
+                bookings = SortBooking.sortBookings(rawBookings)
                 isLoading = false
             }
         }
@@ -185,7 +188,7 @@ private struct BookingLogSkeletonCard: View {
                     .frame(width:93, height: 36)
                 Spacer()
                 SkeletonView(RoundedRectangle(cornerRadius: 0))
-                    .frame(width: 140, height: 35, alignment: .trailing)
+                    .frame(width: 160, height: 25, alignment: .trailing)
             }
         }
         .padding()

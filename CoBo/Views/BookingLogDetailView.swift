@@ -204,7 +204,6 @@ struct InfoRow: View {
     }
 }
 
-// MARK: - CancelBookingSheet
 struct CancelBookingSheet: View {
     @Binding var codeInput: String
     @Binding var errorMessage: String?
