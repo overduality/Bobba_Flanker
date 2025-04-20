@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BookingLogView: View {
+    @Environment(Settings.self) private var settings
     @Environment(\.modelContext) var modelContext
     
     @State private var selectedDate: Date = Date()

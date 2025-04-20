@@ -7,6 +7,7 @@
 
 import SwiftUI
 struct TimeslotManager : View{
+    @Environment(Settings.self) private var settings
     @Environment(\.modelContext) var modelContext
     
     @Binding var navigationPath: NavigationPath
@@ -40,7 +41,7 @@ struct TimeslotManager : View{
     private func getTimeslotStatus(timeslot: Timeslot) -> Bool {
         let bookingController = BookingController()
         bookingController.setupModelContext(modelContext)
-        bookingController.autoCloseBooking()
+        bookingController.autoCloseBooking(appSettings: settings)
         let bookings: [Booking] = bookingController.getAllBooking()
         let calendar = Calendar.current
         

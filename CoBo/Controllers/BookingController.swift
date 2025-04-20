@@ -98,7 +98,7 @@ class BookingController {
         }
     }
 
-    func checkInBooking(_ checkInCode: String) -> [String]? {
+    func checkInBooking(_ checkInCode: String, appSettings: Settings) -> [String]? {
         guard let context = modelContext else {
             print("Model Context is Not Available")
             return nil
@@ -121,8 +121,8 @@ class BookingController {
                     return ["This booking has been canceled.", "Please contact the administrator for any issues."]
                 }
                 // check
-                let startCheckIn = bookingFetched.timeslot.startCheckIn
-                let endCheckIn = bookingFetched.timeslot.endCheckIn
+                let startCheckIn = TimeslotUtil.getStartCheckInTime(timeslot: bookingFetched.timeslot, tolerance: appSettings.checkInTolerance)
+                let endCheckIn = TimeslotUtil.getEndCheckInTime(timeslot: bookingFetched.timeslot, tolerance: appSettings.checkInTolerance)
                 let date = bookingFetched.date
                 let calendar = Calendar.current
                 let now = Date()
@@ -152,12 +152,12 @@ class BookingController {
                                 try context.save()
                                 return ["Check-in successful ✅", "You can now use your space at \(bookingFetched.collabSpace.name)."]
                             } else {
-                                return notifyUserAboutCheckInTime(bookingFetched: bookingFetched)
+                                return notifyUserAboutCheckInTime(bookingFetched: bookingFetched, appSetting: appSettings)
                             }
                         }
                     }
                 }else{
-                    return notifyUserAboutCheckInTime(bookingFetched: bookingFetched)
+                    return notifyUserAboutCheckInTime(bookingFetched: bookingFetched, appSetting: appSettings)
                 }
 
                 
@@ -170,16 +170,19 @@ class BookingController {
         }
 
     // FOR CASE NOT WITHIN CHECK-IN TIME
-    func notifyUserAboutCheckInTime(bookingFetched: Booking) -> [String]{
+    func notifyUserAboutCheckInTime(bookingFetched: Booking, appSetting: Settings) -> [String]{
         // format date
         let formatter = DateFormatter()
         formatter.dateFormat = "dd/MM/yy"
         let formattedDate = formatter.string(from: bookingFetched.date)
         
-        return ["Not within check-in time ⏳", "You can check-in for your booking at \(bookingFetched.collabSpace.name) on \(formattedDate), at \(bookingFetched.timeslot.startCheckIn) - \(bookingFetched.timeslot.endCheckIn)."]
+        let startCheckIn = TimeslotUtil.getStartCheckInTime(timeslot: bookingFetched.timeslot, tolerance: appSetting.checkInTolerance)
+        let endCheckIn = TimeslotUtil.getEndCheckInTime(timeslot: bookingFetched.timeslot, tolerance: appSetting.checkInTolerance)
+        
+        return ["Not within check-in time ⏳", "You can check-in for your booking at \(bookingFetched.collabSpace.name) on \(formattedDate), at \(startCheckIn) - \(endCheckIn)."]
     }
     
-    func autoCloseBooking() {
+    func autoCloseBooking(appSettings: Settings) {
         guard let context = modelContext else {
             print("Model Context is Not Available : Auto Close Booking")
             return
@@ -202,7 +205,7 @@ class BookingController {
             
             for booking in bookings {
                 if booking.status == BookingStatus.notCheckedIn {
-                    let endCheckIn = booking.timeslot.endCheckIn
+                    let endCheckIn = TimeslotUtil.getEndCheckInTime(timeslot: booking.timeslot, tolerance: appSettings.checkInTolerance)
                     let formatter = DateFormatter()
                     formatter.dateFormat = "HH:mm"
                     

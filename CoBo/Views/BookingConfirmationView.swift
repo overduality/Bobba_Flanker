@@ -9,6 +9,8 @@ import SwiftUI
 
 struct BookingConfirmationView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(Settings.self) private var settings
+    
     @Binding var navigationPath: NavigationPath
     
     var bookingController = BookingController()
@@ -145,7 +147,7 @@ struct BookingConfirmationView: View {
     func confirmBooking() {
         guard let unwrappedBooking = booking else { return }
         
-        let isAutoCheckIn = isAutoCheckInBooking(unwrappedBooking)
+        let isAutoCheckIn = isAutoCheckInBooking(for: unwrappedBooking, appSettings: settings)
         
         if isAutoCheckIn {
             unwrappedBooking.status = .checkedIn
@@ -155,9 +157,9 @@ struct BookingConfirmationView: View {
         navigationPath.append(BookingSuccessContext(booking: unwrappedBooking, isAutoCheckIn: isAutoCheckIn))
     }
     
-    func isAutoCheckInBooking(_ booking: Booking) -> Bool {
-        let startCheckIn = booking.timeslot.startCheckIn
-        let endCheckIn = booking.timeslot.endCheckIn
+    func isAutoCheckInBooking(for booking: Booking, appSettings: Settings) -> Bool {
+        let startCheckIn = TimeslotUtil.getStartCheckInTime(timeslot: booking.timeslot, tolerance: appSettings.checkInTolerance)
+        let endCheckIn = TimeslotUtil.getEndCheckInTime(timeslot: booking.timeslot, tolerance: appSettings.checkInTolerance)
         let endTimeslot = doubleToTime(booking.timeslot.endHour)
         let date = booking.date
         let calendar = Calendar.current

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Booking_Summary: View {
+    @Environment(Settings.self) private var settings
+    
     var booking: Booking
     @State var collabSpace: CollabSpace?
     
@@ -19,6 +21,20 @@ struct Booking_Summary: View {
         dateFormatter.dateFormat = "dd MMMM YYYY"
         
         return "\(weekdayFormatter.string(from: booking.date)), \(dateFormatter.string(from: booking.date))"
+    }
+    
+    var startCheckIn: String {
+        get {
+            print(settings.checkInTolerance)
+            return TimeslotUtil.getStartCheckInTime(timeslot: booking.timeslot, tolerance: settings.checkInTolerance)
+        }
+    }
+    
+    var endCheckIn: String {
+        get {
+            print(settings.checkInTolerance)
+            return TimeslotUtil.getEndCheckInTime(timeslot: booking.timeslot, tolerance: settings.checkInTolerance)
+        }
     }
     
     var body: some View {
@@ -39,7 +55,7 @@ struct Booking_Summary: View {
                 Text("Check-In Time")
                     .font(.system(size: 14))
                 Spacer()
-                Text("\(booking.timeslot.startCheckIn) - \(booking.timeslot.endCheckIn)")
+                Text("\(startCheckIn) - \(endCheckIn)")
                     .bold()
                     .font(.system(size: 14))
             }
