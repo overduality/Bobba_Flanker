@@ -80,26 +80,6 @@ struct BookingView : View{
     }
 }
 
-//        Divider()
-//                .offset(y: -18)
-//        VStack(alignment: .leading, spacing: 12){
-//            Text("Available timeslot").font(.system(size: 13)).fontWeight(.medium)
-//            TimeslotManager(navigationPath: $navigationPath, collabSpace: .constant(collabSpace), selectedDate: .constant(selectedDate))
-//        }
-//        .padding(.horizontal, 16)
-//        .padding(.bottom, 24)
-//    }
-//    .background(
-//        RoundedRectangle(cornerRadius: 12)
-//            .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-//            .background(Color.white)
-//            .cornerRadius(12)
-//            .shadow(color: Color.gray.opacity(0.2),radius: 4)
-//
-//    )
-//    .frame(width: 329)
-//
-
 
 
 private struct BookingViewSkeletonCard: View {
