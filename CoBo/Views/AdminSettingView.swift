@@ -16,6 +16,9 @@ struct AdminSettingView: View {
         List {
             AdminSettingItemComponent(image: "gearshape.fill", title: "General Setting")
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .onTapGesture {
+                    navigateToGeneralSetting()
+                }
             AdminSettingItemComponent(image: "folder.fill", title: "Booking Log")
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             AdminSettingItemComponent(image: "key.fill", title: "Admin Access")
@@ -37,15 +40,16 @@ struct AdminSettingView: View {
         .toolbar(.hidden, for: .tabBar)
         
         .sheet(isPresented: $showAdminTotpSheet) {
-            let secretKey = "MYYHC33XJBLVE3RYKU4UG4LZGRZXK42M"
-            let provisioningUri = TotpUtil.getProvisioningUri(for: secretKey, username: "Admin")
-            let image = generateQRCode(for: provisioningUri)
-            AdminTotpQRView(image: image)
+            AdminTotpQRView()
+        }
+        .navigationDestination(for: GeneralSettingContext.self) { context in
+            AppSettingsFormView(navigationPath: $navigationPath)
         }
     }
     
     func navigateToGeneralSetting() {
-        print("Navigate to General Setting")
+        let generalSettingContext = GeneralSettingContext()
+        navigationPath.append(generalSettingContext)
     }
     
     func navigateToAdminBookingLog() {
@@ -54,23 +58,6 @@ struct AdminSettingView: View {
     
     func openSheetAdminAccessCode() {
         showAdminTotpSheet = true
-    }
-    
-    func generateQRCode(for value: String) -> Image? {
-        let context = CIContext()
-        let filter = CIFilter.qrCodeGenerator()
-        
-        guard let data = value.data(using: .utf8) else { return nil }
-        filter.message = data
-        filter.correctionLevel = "M"
-        
-        if let outputImage = filter.outputImage {
-            if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
-                return Image(decorative: cgImage, scale: 1)
-            }
-        }
-        
-        return nil
     }
 }
 

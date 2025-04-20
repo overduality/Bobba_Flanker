@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BookingLogView: View {
+    @Environment(Settings.self) private var settings
     @Environment(\.modelContext) var modelContext
     
     @State private var selectedDate: Date = Date()
@@ -108,7 +109,7 @@ struct BookingLogView: View {
         }
         .onAppear() {
             bookingController.setupModelContext(modelContext)
-            bookingController.autoCloseBooking()
+            bookingController.autoCloseBooking(appSettings: settings)
             let rawBookings = bookingController.getBookingsByDate(selectedDate)
             bookings = SortBooking.sortBookings(rawBookings)
         }

@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SplashscreenView: View {
+    @Environment(\.modelContext) private var modelContext
+    
+    @State private var settings: Settings?
     @State private var isActive = false
     @State private var opacity = 0.0
     @State private var scale: CGFloat = 0.8
@@ -16,6 +20,7 @@ struct SplashscreenView: View {
         if isActive {
             IntroductionView()
                 .transition(.opacity.animation(.easeIn(duration: 0.5)))
+                .environment(settings ?? Settings())
         } else {
             ZStack {
                 Color.white.edgesIgnoringSafeArea(.all)
@@ -27,6 +32,8 @@ struct SplashscreenView: View {
                     .opacity(opacity)
                     .scaleEffect(scale)
                     .onAppear {
+                        loadAppSettings()
+                        
                         withAnimation(.easeIn(duration: 1.5)) {
                             opacity = 1.0
                         }
@@ -37,6 +44,17 @@ struct SplashscreenView: View {
                         }
                     }
             }
+            .environment(settings ?? Settings())
+        }
+    }
+    
+    func loadAppSettings() {
+        do {
+            let descriptor = FetchDescriptor<Settings>()
+            let fetchedSettings = try modelContext.fetch(descriptor)
+            settings = fetchedSettings.first
+        } catch {
+            print("Failed to fetch settings: \(error)")
         }
     }
 }

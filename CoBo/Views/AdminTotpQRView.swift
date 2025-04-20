@@ -8,14 +8,21 @@
 import SwiftUI
 
 struct AdminTotpQRView: View {
-    var image: Image?
+    @Environment(Settings.self) private var settings
+    
+    var image: Image? {
+        get {
+            let provisioningUri = TotpUtil.getProvisioningUri(for: settings.adminSecretKey, username: "Admin")
+            return generateQRCode(for: provisioningUri)
+        }
+    }
     
     var body: some View {
         VStack {
             Text("Scan this QR Code using your preferred authenticator")
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
-            if let qrImage = image{
+            if let qrImage = image {
                 qrImage
                     .resizable()
                     .interpolation(.none)
@@ -28,8 +35,25 @@ struct AdminTotpQRView: View {
             }
         }
     }
+    
+    func generateQRCode(for value: String) -> Image? {
+        let context = CIContext()
+        let filter = CIFilter.qrCodeGenerator()
+        
+        guard let data = value.data(using: .utf8) else { return nil }
+        filter.message = data
+        filter.correctionLevel = "M"
+        
+        if let outputImage = filter.outputImage {
+            if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
+                return Image(decorative: cgImage, scale: 1)
+            }
+        }
+        
+        return nil
+    }
 }
 
 #Preview {
-    AdminTotpQRView(image: nil)
+    AdminTotpQRView()
 }

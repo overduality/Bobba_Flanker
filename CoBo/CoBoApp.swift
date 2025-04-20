@@ -15,44 +15,16 @@ struct CoBoApp: App {
             SplashscreenView()
                 .preferredColorScheme(.light)
         }
-        .modelContainer(for: [Booking.self, CollabSpace.self, Timeslot.self, User.self]) { result in
+        .modelContainer(for: [Booking.self, CollabSpace.self, Timeslot.self, User.self, Settings.self]) { result in
             do {
                 let container = try result.get()
                 populateAllData(container: container)
-//                // Populate User data
-//                try populateData(container: container, fetchDataFunction: DataManager.getUsersData)
-//               
-//                // Populate CollabSpace data
-//                try populateData(container: container,fetchDataFunction: DataManager.getCollabSpacesData)
-//                
-//                // Populate Timeslot data
-//                try populateData(container: container, fetchDataFunction: DataManager.getTimeslotsData)
-//                
-//                try populateData(container: container, fetchDataFunction: DataManager.getBookingData)
             } catch {
                 print("Failed to pre-seed database.")
             }
         }
     }
-    
-    private func populateData<T: PersistentModel>(
-    container: ModelContainer,
-    fetchDataFunction: () -> [T]) throws {
-        let descriptor = FetchDescriptor<T>()
-        let existingCount = try container.mainContext.fetchCount(descriptor)
         
-        if existingCount == 0 {
-            print("Add data for \(T.self)")
-            print("Add \(fetchDataFunction().count) data to \(T.self)")
-            for item in fetchDataFunction() {
-                container.mainContext.insert(item)
-            }
-            print("There is \(try container.mainContext.fetchCount(descriptor)) data for \(T.self)")
-        }
-        
-        try container.mainContext.save()
-    }
-    
     private func populateAllData(container: ModelContainer) {
         let context = container.mainContext
         
@@ -127,6 +99,13 @@ struct CoBoApp: App {
                 context.insert(booking1)
                 context.insert(booking2)
                 print("Added 2 bookings")
+                
+                try context.save()
+                
+                // Add App Settings
+                let appSetting = Settings()
+                context.insert(appSetting)
+                print("Added default admin settings")
                 
                 // Save everything
                 try context.save()

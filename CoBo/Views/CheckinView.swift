@@ -7,6 +7,8 @@
 import SwiftUI
 struct CheckinView: View {
     @Environment(\.modelContext) var modelContext
+    @Environment(Settings.self) private var settings
+    
     var bookingController = BookingController()
     
     @State private var otp: String = ""
@@ -53,11 +55,10 @@ struct CheckinView: View {
                         if otp == "" {
                             alertTitle = "Please input your check-in code!"
                         }else{
-                            if let checkInResult = bookingController.checkInBooking(otp) {
-                                                        alertTitle = checkInResult[0]
-                                                        alertMessage = checkInResult[1]
-                                                    }
-                            
+                            if let checkInResult = bookingController.checkInBooking(otp, appSettings: settings) {
+                                    alertTitle = checkInResult[0]
+                                    alertMessage = checkInResult[1]
+                                }
                         }
                         showAlert = true
 

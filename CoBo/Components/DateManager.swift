@@ -7,6 +7,8 @@
 import SwiftUI
 
 struct DateManager: View {
+    @Environment(Settings.self) private var settings
+    
     @Binding var selectedDate: Date
     var dates: [Date] {
         generateWeekdays()
@@ -39,7 +41,9 @@ struct DateManager: View {
         var dates: [Date] = []
         var currentDate = Date()
         
-        for _ in 0..<8 {
+         let dateLimit = settings.validBookInAdvance + 1
+         
+         for _ in 0..<dateLimit {
             let weekday = calendar.component(.weekday, from: currentDate)
             
             if weekday > 1 && weekday < 7 {
