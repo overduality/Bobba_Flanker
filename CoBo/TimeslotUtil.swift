@@ -19,7 +19,6 @@ public struct TimeslotUtil {
     }
     
     static func getStartCheckInTime(timeslot: Timeslot, tolerance: Int) -> String{
-        print(Double(tolerance / 60))
         return doubleToTimeString(timeslot.startHour - (Double(tolerance) / 60.0))
     }
     

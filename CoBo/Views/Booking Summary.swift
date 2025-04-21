@@ -25,14 +25,12 @@ struct Booking_Summary: View {
     
     var startCheckIn: String {
         get {
-            print(settings.checkInTolerance)
             return TimeslotUtil.getStartCheckInTime(timeslot: booking.timeslot, tolerance: settings.checkInTolerance)
         }
     }
     
     var endCheckIn: String {
         get {
-            print(settings.checkInTolerance)
             return TimeslotUtil.getEndCheckInTime(timeslot: booking.timeslot, tolerance: settings.checkInTolerance)
         }
     }

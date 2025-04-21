@@ -21,6 +21,9 @@ struct AdminSettingView: View {
                 }
             AdminSettingItemComponent(image: "folder.fill", title: "Booking Log")
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .onTapGesture {
+                    navigateToAdminBookingLog()
+                }
             AdminSettingItemComponent(image: "key.fill", title: "Admin Access")
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .onTapGesture {
@@ -45,6 +48,9 @@ struct AdminSettingView: View {
         .navigationDestination(for: GeneralSettingContext.self) { context in
             AppSettingsFormView(navigationPath: $navigationPath)
         }
+        .navigationDestination(for: AdminBookingLogContext.self) { context in
+            AdminBookingLogView(navigationPath: $navigationPath)
+        }
     }
     
     func navigateToGeneralSetting() {
@@ -53,7 +59,8 @@ struct AdminSettingView: View {
     }
     
     func navigateToAdminBookingLog() {
-        print("Navigate to Admin Booking Log")
+        let adminBookingLogContext = AdminBookingLogContext()
+        navigationPath.append(adminBookingLogContext)
     }
     
     func openSheetAdminAccessCode() {

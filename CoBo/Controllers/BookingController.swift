@@ -232,4 +232,43 @@ class BookingController {
         }
         
     }
+    
+    func getFilteredBookings(with filter: FilterPredicate) -> [Booking] {
+        guard let context = modelContext else {
+            print("Model Context is Not Available : Get Filtered Bookings")
+            return []
+        }
+        
+        // Get all bookings first
+        let allBookings = getAllBooking()
+        
+        // Apply filters manually
+        return allBookings.filter { booking in
+            // Check date range
+            if let startDate = filter.startDate, booking.date < startDate {
+                return false
+            }
+            
+            if let endDate = filter.endDate, booking.date > endDate {
+                return false
+            }
+            
+            // Check timeslots
+            if !filter.timeslotsPredicate.isEmpty && !filter.timeslotsPredicate.contains(booking.timeslot) {
+                return false
+            }
+            
+            // Check collab spaces
+            if !filter.collabSpacePredicate.isEmpty && !filter.collabSpacePredicate.contains(booking.collabSpace) {
+                return false
+            }
+            
+            // Check booking status
+            if !filter.bookingStatusPredicate.isEmpty && !filter.bookingStatusPredicate.contains(booking.status) {
+                return false
+            }
+            
+            return true
+        }
+    }
 }
