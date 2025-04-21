@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class CollabSpace {
+class CollabSpace: Hashable {
     var name: String
     var capacity: Int
     var whiteboardAmount: Int

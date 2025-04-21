@@ -152,7 +152,7 @@ struct BookingLogView: View {
     }
 }
 
-private struct BookingLogSkeletonCard: View {
+struct BookingLogSkeletonCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             SkeletonView(RoundedRectangle(cornerRadius: 6))
@@ -202,4 +202,5 @@ private struct BookingLogSkeletonCard: View {
 
 #Preview {
     BookingLogView()
+        .environment(Settings())
 }

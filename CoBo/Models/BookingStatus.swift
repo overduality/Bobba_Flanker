@@ -8,9 +8,11 @@
 import Foundation
 
 // TODO: Better case naming for BookingStatus
-enum BookingStatus: String, Codable, Equatable{
+enum BookingStatus: String, Codable, Equatable, CaseIterable, Identifiable{
     case checkedIn = "Checked In"
     case notCheckedIn = "Not Checked In"
     case closed = "Closed"
     case canceled = "Canceled"
+    
+    var id: String { self.rawValue }
 }

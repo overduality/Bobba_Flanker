@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Timeslot {
+class Timeslot: Hashable {
     var name: String{
         get {
             return "\(doubleToTime(startHour)) - \(doubleToTime(endHour))"
