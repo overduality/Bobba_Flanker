@@ -27,10 +27,8 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
     }
     
     init(selectedItem: Binding<T?>, data: [T]) {
-        print("Init Dropdown")
         self.data = data
         self._selectedItem = selectedItem
-        print(selectedItem.wrappedValue)
         self._dropdownLabel = State(initialValue: selectedItem.wrappedValue?.dropdownLabel ?? "Select an Option")
     }
     
@@ -118,11 +116,9 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                 : nil
         )
         .onChange(of: selectedItem) { oldValue, newValue in
-            print("Run Onchange")
             dropdownLabel = newValue?.dropdownLabel ?? "Select an Option"
         }
         .onAppear {
-            print("Run On Appear")
             dropdownLabel = selectedItem?.dropdownLabel ?? "Select an Option"
         }
     }
