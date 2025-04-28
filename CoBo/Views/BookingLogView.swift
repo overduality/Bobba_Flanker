@@ -11,6 +11,8 @@ struct BookingLogView: View {
     @Environment(Settings.self) private var settings
     @Environment(\.modelContext) var modelContext
     
+    let screenWidth = UIScreen.main.bounds.width
+    
     @State private var selectedDate: Date = Date()
     @State private var navigationPath = NavigationPath()
     
@@ -23,113 +25,121 @@ struct BookingLogView: View {
     @State private var adminCodeErrorMessage: String? = nil
     
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            VStack(spacing: 0){
-                ZStack(alignment: .topLeading) {
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color.white, Color.lightPurple.opacity(0.3)]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .frame(height: 220)
-                    .ignoresSafeArea()
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack {
-                            Text("🧾").font(.system(size: 34)).fontWeight(.bold)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
-                            Spacer()
-                            Text(Image(systemName: "person.badge.key"))
-                                .font(.system(size: 30)).fontWeight(.bold)
-                                .frame(maxWidth: .infinity, maxHeight: .infinity,alignment: .topTrailing)
-                                .onTapGesture {
-                                    showAdminCodeSheet = true
-                                }
+        GeometryReader { geometry in
+            NavigationStack(path: $navigationPath) {
+                VStack(spacing: 0){
+                    ZStack(alignment: .topLeading) {
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.white, Color.lightPurple.opacity(0.3)]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .frame(height: screenWidth > 400 ?  geometry.size.width * 0.60 : geometry.size.width * 0.65)
+                        .cornerRadius(30, antialiased: true)
+                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                        .ignoresSafeArea()
+                        VStack(alignment: .leading, spacing: geometry.size.height*0.01){
+                            HStack {
+                                Text("🧾")
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                                Spacer()
+                                Text(Image(systemName: "person.badge.key"))
+                                    .font(.title3).fontWeight(.bold)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity,alignment: .topTrailing)
+                                    .onTapGesture {
+                                        showAdminCodeSheet = true
+                                    }
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: 75)
+                            Text("Booking Logs").font(screenWidth > 400 ? .title2 : .title3).fontWeight(.bold)
+                            Text("Search for current and future booking records here.").font(.callout)
                         }
-                        .frame(maxWidth: .infinity, maxHeight: 75)
-                        Text("Booking Logs").font(.system(size: 21)).fontWeight(.bold)
-                        Text("Search for reservation records here.").font(.system(size: 13))
+                        .padding(.horizontal, geometry.size.width*0.05)
+                        .padding(.top, geometry.size.height*0.01)
+                        .padding(.horizontal, 16)
                     }
-                    .padding(.horizontal, 24)
-                    .padding(.top, 28)
-                }
-                VStack(alignment: .leading, spacing: 24) {
-                    VStack(alignment: .leading, spacing: 16){
-                        Text("Search by date 🔍").font(.system(size: 14)).fontWeight(.medium)
-                        DateManager(selectedDate: $selectedDate)
-                    }
-                    VStack(alignment: .leading){
-                        Text("Booking Logs").font(.system(size: 14)).fontWeight(.medium)
-                        if isLoading {
-                            ScrollView {
-                                VStack(spacing: 16) {
-                                    ForEach(0..<3, id: \.self) { _ in
-                                        BookingLogSkeletonCard()
+                    VStack(alignment: .leading, spacing: 24) {
+                        VStack(alignment: .leading, spacing: 16){
+                            Text("Search by date 🔍").font(.system(size: 14)).fontWeight(.medium)
+                            DateManager(selectedDate: $selectedDate)
+                        }
+                        VStack(alignment: .leading){
+                            Text("Booking Logs").font(.system(size: 14)).fontWeight(.medium)
+                            if isLoading {
+                                ScrollView {
+                                    VStack(spacing: 16) {
+                                        ForEach(0..<3, id: \.self) { _ in
+                                            BookingLogSkeletonCard()
+                                        }
+                                    }
+                                    .padding(.vertical)
+                                }
+                            } else if (bookings.count == 0){
+                                VStack {
+                                    Spacer()
+                                    VStack {
+                                        Image("no-booking-found")
+                                            .foregroundColor(.red)
+                                            .font(.system(size: 40))
+                                        Text("No bookings found").font(.system(size: 13)).foregroundColor(.gray).padding(.top, 4)
+                                    }
+                                    Spacer()
+                                }
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                
+                            } else {
+                                ScrollView {
+                                    VStack {
+                                        ForEach(bookings) { booking in
+                                            BookingLogCardComponent(booking: booking)
+                                                .padding(.vertical)
+                                                .onTapGesture {
+                                                    navigationPath.append(BookingLogDetailContext(booking: booking))
+                                                }
+                                        }
                                     }
                                 }
-                                .padding(.vertical)
-                            }
-                        } else if (bookings.count == 0){
-                            VStack {
-                                Spacer()
-                                VStack {
-                                    Image("no-booking-found")
-                                        .foregroundColor(.red)
-                                        .font(.system(size: 40))
-                                    Text("No bookings found").font(.system(size: 13)).foregroundColor(.gray).padding(.top, 4)
-                                }
-                                Spacer()
-                            }
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            
-                        } else {
-                            ScrollView {
-                                VStack {
-                                    ForEach(bookings) { booking in
-                                        BookingLogCardComponent(booking: booking)
-                                            .padding(.vertical)
-                                            .onTapGesture {
-                                                navigationPath.append(BookingLogDetailContext(booking: booking))
-                                            }
-                                    }
-                                }
                             }
                         }
                     }
+                    .safeAreaPadding()
+                    .padding(.horizontal, 16)
+                    .padding(.top, -54)
                 }
-                .safeAreaPadding()
-                .padding(.horizontal, 16)
-                .padding(.top, -54)
-            }
-            .navigationDestination(for: BookingLogDetailContext.self) { context in
-                BookingLogDetailsView(navigationPath: $navigationPath, booking: context.booking)
-            }
-            .navigationDestination(for: AdminSettingsContext.self) { context in
-                   AdminSettingView(navigationPath: $navigationPath)
+                .navigationDestination(for: BookingLogDetailContext.self) { context in
+                    BookingLogDetailsView(navigationPath: $navigationPath, booking: context.booking)
                 }
-        }
-        .onAppear() {
-            bookingController.setupModelContext(modelContext)
-            bookingController.autoCloseBooking(appSettings: settings)
-            let rawBookings = bookingController.getBookingsByDate(selectedDate)
-            bookings = SortBooking.sortBookings(rawBookings)
-        }
-
-        .onChange(of: selectedDate) { oldValue, newValue in
-            isLoading = true
-            bookings = []
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                let rawBookings = bookingController.getBookingsByDate(newValue)
+                .navigationDestination(for: AdminSettingsContext.self) { context in
+                       AdminSettingView(navigationPath: $navigationPath)
+                    }
+            }
+            .onAppear() {
+                bookingController.setupModelContext(modelContext)
+                bookingController.autoCloseBooking(appSettings: settings)
+                let rawBookings = bookingController.getBookingsByDate(selectedDate)
                 bookings = SortBooking.sortBookings(rawBookings)
-                isLoading = false
+            }
+
+            .onChange(of: selectedDate) { oldValue, newValue in
+                isLoading = true
+                bookings = []
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    let rawBookings = bookingController.getBookingsByDate(newValue)
+                    bookings = SortBooking.sortBookings(rawBookings)
+                    isLoading = false
+                }
+            }
+            .sheet(isPresented: $showAdminCodeSheet) {
+                AdminCodeView(
+                    codeInput: $adminCodeInput,
+                    errorMessage: $adminCodeErrorMessage,
+                    onConfirm: validateAdminTotp
+                )
             }
         }
-        .sheet(isPresented: $showAdminCodeSheet) {
-            AdminCodeView(
-                codeInput: $adminCodeInput,
-                errorMessage: $adminCodeErrorMessage,
-                onConfirm: validateAdminTotp
-            )
-        }
+        
     }
     
     func validateAdminTotp() {

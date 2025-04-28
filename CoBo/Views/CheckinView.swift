@@ -10,6 +10,7 @@ struct CheckinView: View {
     @Environment(Settings.self) private var settings
     
     var bookingController = BookingController()
+    let screenWidth = UIScreen.main.bounds.width
     
     @State private var otp: String = ""
     @State private var alertTitle = ""
@@ -20,52 +21,58 @@ struct CheckinView: View {
     @Environment(\.dismiss) private var dismissKeyboard
     
     var body: some View {
-        VStack(spacing: 0){
-            ZStack(alignment: .top){
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.white, Color("Light-Purple").opacity(0.5)]),
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .frame(height: 220)
-                .ignoresSafeArea()
-                VStack{
-                    VStack(alignment: .leading, spacing: 6){
-                        Text("🔑").font(.system(size: 34)).fontWeight(.bold)
-                        Text("Check-in to Booking").font(.system(size: 21)).fontWeight(.bold)
-                        Text("Enter your 6-digit check-in code. You can only check-in once your booking's check-in time has begun.").font(.system(size: 13))
-                    }
-                    .padding(.horizontal, 8)
-                    .padding(.top, 12)
-                    
-                    // OTP Component
+        GeometryReader{
+            geometry in
+            VStack(spacing: 0){
+                ZStack(alignment: .top){
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.white, Color.yellow.opacity(0.2)]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                    .frame(height: screenWidth > 400 ?  geometry.size.width * 0.55 : geometry.size.width * 0.60)
+                    .cornerRadius(30, antialiased: true)
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .ignoresSafeArea()
                     VStack{
-                        OTPFieldComponent(numberOfFields: numberOfFieldsInOTP, otp: $otp)
-                            .focused($isTextFieldFocused)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 54)
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            isTextFieldFocused = true
+                        VStack(alignment: .leading, spacing: geometry.size.height*0.01){
+                            Text("🔑").font(.largeTitle).fontWeight(.bold)
+                            Text("Check-in to Booking").font(screenWidth > 400 ? .title2 : .title3).fontWeight(.bold)
+                            Text("Enter your 6-digit check-in code. Make sure you check-in between check-in time.").font(.callout)
                         }
+                        .safeAreaPadding()
+                        .padding(.horizontal, geometry.size.width*0.05)
+                        .padding(.top, geometry.size.height*0.01)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    Button(action: {
-                        isTextFieldFocused = false
-                        if otp == "" {
-                            alertTitle = "Please input your check-in code!"
-                        }else{
-                            if let checkInResult = bookingController.checkInBooking(otp, appSettings: settings) {
+                    VStack{
+                        // OTP Component
+                        VStack{
+                            OTPFieldComponent(numberOfFields: numberOfFieldsInOTP, otp: $otp)
+                                .focused($isTextFieldFocused)
+                        }
+                        .padding(.horizontal, 16)
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                isTextFieldFocused = true
+                            }
+                        }
+                        
+                        Button(action: {
+                            isTextFieldFocused = false
+                            if otp == "" {
+                                alertTitle = "Please input your check-in code!"
+                            }else{
+                                if let checkInResult = bookingController.checkInBooking(otp, appSettings: settings) {
                                     alertTitle = checkInResult[0]
                                     alertMessage = checkInResult[1]
                                 }
-                        }
-                        showAlert = true
-
-                        
+                                
+                            }
+                            showAlert = true
                         }) {
                             Text("Check-in")
-                                .font(.system(size: 15, weight: .medium))
+                                .font(.system(.body , weight: .medium))
                                 .foregroundColor(.white)
                                 .padding(.vertical, 16)
                                 .frame(maxWidth: .infinity)
@@ -77,6 +84,7 @@ struct CheckinView: View {
                                 .padding(.top, 16)
                         }
                         .padding(.top, 16)
+                        .padding(.horizontal, 16)
                         .alert(isPresented: $showAlert) {
                             Alert(
                                 title: Text(alertTitle),
@@ -84,20 +92,26 @@ struct CheckinView: View {
                                 dismissButton: .default(Text("OK"))
                             )
                         }
+                    }.padding(.top, 212)
+                    
+                    //close zstack
                 }
-                .safeAreaPadding()
+                
+                
+                
             }
-            .frame(maxHeight: .infinity, alignment: .top)
             .onTapGesture {
                 isTextFieldFocused = false
+                hideKeyboard()
+            }
+            .onAppear(){
+                bookingController.setupModelContext(self.modelContext)
+            }
+            .onDisappear {
+                otp = ""
             }
         }
-        .onAppear(){
-            bookingController.setupModelContext(self.modelContext)
-        }
-        .onDisappear {
-            otp = ""
-        }
+        
         
     }
     
@@ -106,3 +120,10 @@ struct CheckinView: View {
 #Preview {
     CheckinView()
 }
+
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
