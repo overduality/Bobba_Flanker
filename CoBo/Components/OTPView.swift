@@ -1,4 +1,3 @@
-
 import SwiftUI
 import Combine
 
@@ -21,29 +20,27 @@ struct OTPFieldComponent: View {
     }
     
     var body: some View {
-        HStack(spacing: 15) {
+        HStack(spacing: 12) {
             ForEach(0..<numberOfFields, id: \.self) { index in
                 TextField("", text: $pins[index])
                     .modifier(OtpModifier(pin: $pins[index]))
-                    .foregroundColor(Color("Dark-Purple"))
-                    .fontWeight(.bold)
-                    .font(.system(size: 21))
+                    .foregroundColor(Color.black)
+                    .font(.title)
                     .keyboardType(.numberPad)
                     .onChange(of: pins[index]) { newVal in
                         if newVal.count == 1 {
                             if index < numberOfFields - 1 {
-                                pinFocusState = FocusPin.pin(index + 1)
+                                pinFocusState = .pin(index + 1)
                             } else {
+                                pinFocusState = nil
                             }
-                        }
-                        else if newVal.count == numberOfFields, let intValue = Int(newVal) {
+                        } else if newVal.count == numberOfFields {
                             otp = newVal
                             updatePinsFromOTP()
-                            pinFocusState = FocusPin.pin(numberOfFields - 1)
-                        }
-                        else if newVal.isEmpty {
+                            pinFocusState = nil
+                        } else if newVal.isEmpty {
                             if index > 0 {
-                                pinFocusState = FocusPin.pin(index - 1)
+                                pinFocusState = .pin(index - 1)
                             }
                         }
                         updateOTPString()
@@ -55,7 +52,6 @@ struct OTPFieldComponent: View {
             }
         }
         .onAppear {
-            // Initialize pins based on the OTP string
             updatePinsFromOTP()
         }
         .onChange(of: otp) { newValue in
@@ -93,11 +89,12 @@ struct OtpModifier: ViewModifier {
             .multilineTextAlignment(.center)
             .keyboardType(.numberPad)
             .onReceive(Just(pin)) { _ in limitText(textLimit) }
-            .frame(width: 40, height: 48)
-            .font(.system(size: 14))
+            .frame(width: 44, height: 60)
+            .font(.title)
             .background(
                 RoundedRectangle(cornerRadius: 4)
-                    .stroke(Color(.systemGray4), lineWidth: 1)
+                    .fill(Color(.systemGray6))
+                    .stroke(Color(.systemGray6), lineWidth: 1)
             )
     }
 }

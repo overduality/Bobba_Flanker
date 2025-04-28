@@ -8,6 +8,8 @@
 import SwiftUI
 import SwiftData
 
+// Search Coordinator Name
+
 struct SearchableDropdownComponent<T:DropdownProtocol>: View {
     @State private var isExpanded = false
     @State private var dropdownLabel: String
@@ -43,13 +45,13 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                     HStack {
                         Text(dropdownLabel)
                             .lineLimit(1)
-                            .font(.system(size:13))
+                            .font(.callout)
                             .foregroundStyle(Color.black)
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                             .foregroundStyle(Color.darkPurple)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: 10)
+                    .frame(maxWidth: .infinity, maxHeight: 14)
                     .padding()
                     .background(Color.clear)
                     .border(lightGrayColor)
@@ -137,3 +139,4 @@ struct SearchableComponentTestView: View {
 #Preview {
     SearchableComponentTestView()
 }
+

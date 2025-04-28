@@ -15,13 +15,16 @@ struct TimeslotComponent: View {
     var selectedDate: Date
     @Binding var collabSpace: CollabSpace
     
+    var geometrySize: CGFloat
+    let screenWidth = UIScreen.main.bounds.width
+    
     var body: some View {
         NavigationLink(value: BookingFormContext(date: selectedDate, timeslot: timeslot, collabSpace: collabSpace)) {
             if (isBooked) {
                 Text("\(timeslot.name)")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.system(screenWidth > 400 ? .caption: .caption2))
                     .foregroundColor(Color.gray)
-                    .frame(width:93, height: 36)
+                    .frame(width:geometrySize*0.22, height: 36)
                     .background(Color.white)
                     .cornerRadius(12)
                     .overlay(
@@ -30,9 +33,9 @@ struct TimeslotComponent: View {
                     )
             }else {
                 Text("\(timeslot.name)")
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.system(screenWidth > 400 ? .caption: .caption2))
                     .foregroundColor(Color("Dark-Purple"))
-                    .frame(width:93, height: 36)
+                    .frame(width:geometrySize*0.22, height: 36)
                     .background(Color.white)
                     .cornerRadius(12)
                     .overlay(
@@ -46,12 +49,12 @@ struct TimeslotComponent: View {
     }
 }
 
-
-#Preview {
-    let navigationPath = NavigationPath()
-    let timeslot = DataManager.getTimeslotsData()[0]
-    let collabSpace = DataManager.getCollabSpacesData()[0]
-    let date = Date.now
-    
-    TimeslotComponent(navigationPath: .constant(navigationPath), timeslot: .constant(timeslot), isBooked: .constant(true), selectedDate: date, collabSpace: .constant(collabSpace))
-}
+//
+//#Preview {
+//    let navigationPath = NavigationPath()
+//    let timeslot = DataManager.getTimeslotsData()[0]
+//    let collabSpace = DataManager.getCollabSpacesData()[0]
+//    let date = Date.now
+//    
+//    TimeslotComponent(navigationPath: .constant(navigationPath), timeslot: .constant(timeslot), isBooked: .constant(true), selectedDate: date, collabSpace: .constant(collabSpace))
+//}

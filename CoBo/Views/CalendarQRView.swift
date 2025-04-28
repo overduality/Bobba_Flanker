@@ -9,7 +9,7 @@ import CoreImage.CIFilterBuiltins
 
 struct CalendarQRView: View {
     @Environment(\.dismiss) var dismiss
-    let booking: Booking  
+    let booking: Booking
     var qrCodeText: String {
         generateQRCodeFromBooking(booking)
     }
@@ -31,7 +31,7 @@ Scan this QR code to effortlessly add the
 event to your iCal and receive timely reminders.
 """)
             .multilineTextAlignment(.center)
-            .font(.system(size: 13))
+            .font(.callout)
             .padding()
             if let qrImage = generateQRCode(from: qrCodeText) {
                 qrImage
@@ -52,3 +52,4 @@ event to your iCal and receive timely reminders.
         .padding()
     }
 }
+
