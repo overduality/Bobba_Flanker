@@ -1,9 +1,10 @@
 //
-//  TimeslotView.swift
+//  TimeslotManager.swift
 //  cobo-personal
 //
 //  Created by Amanda on 25/03/25.
-//
+//  Adjusted by Rieno on 07/05/25
+
 
 import SwiftUI
 
@@ -20,41 +21,62 @@ struct TimeslotComponent: View {
     
     var body: some View {
         NavigationLink(value: BookingFormContext(date: selectedDate, timeslot: timeslot, collabSpace: collabSpace)) {
-            if (isBooked) {
-                Text("\(timeslot.name)")
-                    .font(.system(screenWidth > 400 ? .caption: .caption2))
-                    .foregroundColor(Color.gray)
-                    .frame(width:geometrySize*0.22, height: 36)
-                    .background(Color.white)
-                    .cornerRadius(12)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color.gray, lineWidth: 1)
-                    )
-            }else {
-                Text("\(timeslot.name)")
-                    .font(.system(screenWidth > 400 ? .caption: .caption2))
-                    .foregroundColor(Color("Dark-Purple"))
-                    .frame(width:geometrySize*0.22, height: 36)
-                    .background(Color.white)
-                    .cornerRadius(12)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(Color("Light-Purple"), lineWidth: 1)
-                    )
-            }
+            Text("\(timeslot.name)")
+                .font(screenWidth > 400 ? .system(size: 14) : .caption2)
+                .fontWeight(.semibold)
+                .foregroundColor(isBooked ? Color(red: 148/255, green: 148/255, blue: 148/255) : Color("Green-Dark"))
+                .frame(width: 152, height: 40)
+                .lineLimit(1)
+                .background(Color.white)
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(
+                            isBooked ? Color(red: 148/255, green: 148/255, blue: 148/255).opacity(0.75) : Color.clear,
+                            lineWidth: isBooked ? 0.5 : 0
+                        )
+                )
+                .shadow(color: isBooked ? .clear : Color.black.opacity(0.25), radius: 4, x: 0, y: 4)
         }
         .disabled(isBooked)
-        
     }
 }
 
-//
-//#Preview {
-//    let navigationPath = NavigationPath()
-//    let timeslot = DataManager.getTimeslotsData()[0]
-//    let collabSpace = DataManager.getCollabSpacesData()[0]
-//    let date = Date.now
-//    
-//    TimeslotComponent(navigationPath: .constant(navigationPath), timeslot: .constant(timeslot), isBooked: .constant(true), selectedDate: date, collabSpace: .constant(collabSpace))
-//}
+
+struct TimeslotComponent_Previews: PreviewProvider {
+    struct PreviewWrapper: View {
+        @State var navigationPath = NavigationPath()
+        @State var timeslot = DataManager.getTimeslotsData()[0]
+        @State var collabSpace = DataManager.getCollabSpacesData()[0]
+
+        var body: some View {
+            VStack(spacing: 16) {
+                // Available
+                TimeslotComponent(
+                    navigationPath: $navigationPath,
+                    timeslot: $timeslot,
+                    isBooked: .constant(false),
+                    selectedDate: Date(),
+                    collabSpace: $collabSpace,
+                    geometrySize: 1210
+                )
+
+                // Booked
+                TimeslotComponent(
+                    navigationPath: $navigationPath,
+                    timeslot: $timeslot,
+                    isBooked: .constant(true),
+                    selectedDate: Date(),
+                    collabSpace: $collabSpace,
+                    geometrySize: 1210
+                )
+ 
+        }
+            .padding()
+        }
+    }
+
+    static var previews: some View {
+        PreviewWrapper()
+    }
+}

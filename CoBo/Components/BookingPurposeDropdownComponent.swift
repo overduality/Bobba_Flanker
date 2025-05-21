@@ -35,7 +35,7 @@ struct BookingPurposeDropdownComponent: View {
                     HStack {
                         Text(dropdownLabel)
                             .lineLimit(1)
-                            .font(.callout)
+                            .font(.system(size:16))
                             .foregroundStyle(Color.black)
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -43,9 +43,11 @@ struct BookingPurposeDropdownComponent: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: 14)
                     .padding()
-                    .background(Color.clear)
-                    .border(lightGrayColor)
-                    .cornerRadius(3)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color(red: 232/255, green: 232/255, blue: 232/255), lineWidth: 1))
                 }
                 
                 Spacer()
@@ -60,7 +62,7 @@ struct BookingPurposeDropdownComponent: View {
                                 Text(item.rawValue)
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding()
-                                    .font(.system(size:13))
+                                    .font(.system(size:16))
                                     .contentShape(Rectangle())
                                     .onTapGesture {
                                         dropdownLabel = item.rawValue

@@ -25,7 +25,6 @@ struct MultipleSelectionDropdownComponent<T:DropdownProtocol>: View {
                 return true
             }
             
-            // searchText has content, so check if description contains the search text
             return item.dropdownLabel.localizedCaseInsensitiveContains(searchText)
         }
     }
@@ -34,12 +33,12 @@ struct MultipleSelectionDropdownComponent<T:DropdownProtocol>: View {
     init(selectedData: Binding<[T]>, allData: [T]) {
         self._selectedData = selectedData
         self.allData = allData
-        self.itemColor = Color.purple
+        self.itemColor = Color("Green-Dark")
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            TagPlacer(spacing: 8) {
+        VStack(alignment: .leading, spacing: 32) {
+            TagPlacer(spacing: 24) {
                 ForEach(selectedData) { data in
                     MultipleSelectionItemComponent(item: data, color: itemColor){
                         if let index = selectedData.firstIndex(where: { $0.dropdownLabel == data.dropdownLabel }) {
@@ -54,15 +53,16 @@ struct MultipleSelectionDropdownComponent<T:DropdownProtocol>: View {
             } label: {
                 Text("+ Add Participant")
             }
-            .font(.system (.callout, weight: .medium))
-            .foregroundColor(.white)
+            .font(.system (size:16, weight: .medium))
+            .foregroundColor((Color("Green-Dark")))
                 .padding(.vertical, 10)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 24)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.purple) // Light cream/yellow color
-                )
+                        .fill(Color.white)          .shadow(color:Color.black.opacity(0.25), radius: 4, x: 0, y: 4)
+           )
                 .frame(maxWidth: .infinity, alignment: .leading)
+      
             if (isDropdownExpanded) {
                 VStack {
                     TextField("Search...", text: $searchText)
@@ -113,21 +113,22 @@ struct MultipleSelectionItemComponent<T: DropdownProtocol>: View {
     let onRemove: () -> Void
     
     var body: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: 24) {
             Text(item.dropdownLabel)
-                .font(.system(size: 14))
+                .font(.system(size: 16, weight:.semibold))
                 .foregroundColor(.white)
+            
             
             Button(action: onRemove) {
                 Image(systemName: "xmark")
-                    .font(.system(size: 12, weight: .bold))
+                    .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(.white)
             }
         }
-        .padding(.vertical, 6)
-        .padding(.horizontal, 10)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
         .background(color)
-        .cornerRadius(16)
+        .cornerRadius(13)
     }
 }
 

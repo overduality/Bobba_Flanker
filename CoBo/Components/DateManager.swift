@@ -3,7 +3,7 @@
 //  cobo-personal
 //
 //  Created by Amanda on 25/03/25.
-//
+//  Adjusted by Rieno on 07/05/25
 import SwiftUI
 
 struct DateManager: View {
@@ -36,17 +36,16 @@ struct DateManager: View {
         let calendar = Calendar.current
         return calendar.isDate(date1, inSameDayAs: date2)
     }
-     func generateWeekdays() -> [Date] {
+    func generateWeekdays() -> [Date] {
         let calendar = Calendar.current
         var dates: [Date] = []
         var currentDate = Date()
         
-         let dateLimit = settings.validBookInAdvance + 1
-         
-         for _ in 0..<dateLimit {
+        // 6 weekdays
+        while dates.count < 6 {
             let weekday = calendar.component(.weekday, from: currentDate)
-            
-            if weekday > 1 && weekday < 7 {
+            // no weekend
+            if weekday >= 2 && weekday <= 6 {
                 dates.append(currentDate)
             }
             
@@ -59,4 +58,5 @@ struct DateManager: View {
 
 #Preview {
     DateManager(selectedDate: .constant(Date()))
+    
 }

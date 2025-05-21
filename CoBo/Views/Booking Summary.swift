@@ -3,7 +3,7 @@
 //  CoBo
 //
 //  Created by Rieno on 07/04/25.
-//
+//  Adjusted by Rieno on 07/05/25
 
 import SwiftUI
 
@@ -89,7 +89,7 @@ struct Booking_Summary: View {
                 Text("Coordinator")
                     .font(.system(.callout))
                 Spacer()
-                Text(booking.coordinator?.name ?? "N/A")
+                Text(booking.coordinator?.name ?? "No Coordinator")
                     .bold()
                     .font(.system(.callout))
             }

@@ -1,8 +1,8 @@
 //
-//  PickDateView.swift
-//  cobo-personal
+//  SelectedDate.swift
+//  Core challenge 2 Stand Alone
 //
-//  Created by Amanda on 25/03/25.
+//  Created by Rieno on 10/05/25.
 //
 import SwiftUI
 
@@ -24,31 +24,30 @@ struct SelectedDateComponent: View {
         }
     }
     var body: some View {
-            VStack {
-                Text(formattedDate)
-                    .font(.system(size: 11))
+            HStack {
+                Text(dayText + ",")
+                    .font(.system(size: 16))
+                    .fontWeight(.semibold)
                     .foregroundColor(.white)
-                
-                Text(dayText)
-                    .font(.system(size: 13))
-                    .fontWeight(.bold)
+                    .padding(.trailing, -4)
+                Text(formattedDate)
+                    .font(.system(size: 16))
+                    .fontWeight(.semibold)
                     .foregroundColor(.white)
             }
-            .padding()
-            .frame(width:72, height: 49)
-            .background(
-                Color("Purple")
-            )
-            .cornerRadius(12)
-            
+            .frame(width:170, height: 50)
+            .background(Color("Green-Dark"))
+            .cornerRadius(13)
+            .padding(.horizontal, 32)
+            .padding(.vertical,16)
+
         }
     
 }
 
-// Example Preview with a selected date
 struct SelectedDateView_Previews: PreviewProvider {
     static var previews: some View {
-            SelectedDateComponent(selectedDate: .constant(Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 26))!))
+            SelectedDateComponent(selectedDate: .constant(Calendar.current.date(from: DateComponents(year: 2025, month: 5, day: 10))!))
         }
 }
 

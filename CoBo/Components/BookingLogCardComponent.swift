@@ -29,7 +29,7 @@ struct BookingLogCardComponent: View {
             HStack {
                 Text("Coordinator:")
                     .font(.system(size: 12))
-                Text(booking.coordinator?.name ?? "")
+                Text(booking.coordinator?.name ?? "No Coordinator")
                     .font(.system(size: 12))
             }
             

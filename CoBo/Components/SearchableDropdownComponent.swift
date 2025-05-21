@@ -3,12 +3,11 @@
 //  CoBo
 //
 //  Created by Evan Lokajaya on 26/03/25.
-//
+//  Adjusted by Rieno on 07/05/25
 
 import SwiftUI
 import SwiftData
 
-// Search Coordinator Name
 
 struct SearchableDropdownComponent<T:DropdownProtocol>: View {
     @State private var isExpanded = false
@@ -45,7 +44,7 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                     HStack {
                         Text(dropdownLabel)
                             .lineLimit(1)
-                            .font(.callout)
+                            .font(.system(size: 16))
                             .foregroundStyle(Color.black)
                         Spacer()
                         Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
@@ -53,10 +52,13 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                     }
                     .frame(maxWidth: .infinity, maxHeight: 14)
                     .padding()
-                    .background(Color.clear)
-                    .border(lightGrayColor)
-                    .cornerRadius(3)
-                }
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color(red: 232/255, green: 232/255, blue: 232/255), lineWidth: 1))
+                        }
+                        
                 
                 Spacer()
                     .frame(height: isExpanded ? 300 : 0)
@@ -77,7 +79,7 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
                             LazyVStack(spacing: 0) {
                                 ForEach(filteredData) { item in
                                     Text(item.dropdownLabel)
-                                        .font(.system(size:13))
+                                        .font(.system(size:16))
                                         .frame(maxWidth: .infinity, alignment: .leading)
                                         .padding()
                                         .contentShape(Rectangle())
@@ -121,7 +123,7 @@ struct SearchableDropdownComponent<T:DropdownProtocol>: View {
             dropdownLabel = newValue?.dropdownLabel ?? "Select an Option"
         }
         .onAppear {
-            dropdownLabel = selectedItem?.dropdownLabel ?? "Select an Option"
+            dropdownLabel = selectedItem?.dropdownLabel ?? "Search or Select an Option"
         }
     }
     

@@ -3,14 +3,14 @@
 //  CoBo
 //
 //  Created by Evan Lokajaya on 25/03/25.
-//
+//  Adjusted by Rieno on 07/05/25
 
 import Foundation
 import SwiftData
 import SwiftUI
 
 @Model
-class Booking: Hashable {
+class Booking: Hashable, Identifiable {
     var name: String?
     var coordinator: User?
     var purpose: BookingPurpose?
@@ -19,7 +19,7 @@ class Booking: Hashable {
     var createdAt: Date
     var timeslot: Timeslot
     var collabSpace: CollabSpace
-    var status: BookingStatus 
+    var status: BookingStatus
     var checkInCode: String?
     
     func getCalendarQRCode() -> Image? {
@@ -54,4 +54,5 @@ class Booking: Hashable {
     }
     
 }
+
 

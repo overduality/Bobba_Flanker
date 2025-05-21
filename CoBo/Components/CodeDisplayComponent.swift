@@ -1,3 +1,10 @@
+//
+//  CodeDisplayComponent.swift
+//  Project 1 Apple
+//
+//  Created by Rieno on 07/05/25.
+//
+
 import SwiftUI
 
 struct CodeDisplayComponent: View {
@@ -8,18 +15,16 @@ struct CodeDisplayComponent: View {
             HStack(spacing: 10) {
                 ForEach(Array(code), id: \.self) { digit in
                     Text(String(digit))
-                        .frame(width: 45, height: 60)
-                        .background(Color.gray.opacity(0.2))
+                        .frame(width: 64, height: 64)
+                        .background(Color.gray.opacity(0.1))
                         .cornerRadius(5)
-                        .font(.title)
+                        .font(.system(size:32))
                         .multilineTextAlignment(.center)
                 }
             }
         }
         .padding()
     }
-
-    // Function to generate a random 6-digit code
     func generateCode() -> String {
         let randomNumber = Int.random(in: 100000...999999)
         return String(randomNumber)

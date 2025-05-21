@@ -3,7 +3,7 @@
 //  CoBo
 //
 //  Created by Evan Lokajaya on 25/03/25.
-//
+//  Adjusted by Rineo on 07/05/25.
 
 import Foundation
 
@@ -74,52 +74,81 @@ final class DataManager {
         // TODO: add image
         return [
             CollabSpace(
-                name: "Collab - 02",
-                capacity: 8,
-                whiteboardAmount: 0,
-                tableWhiteboardAmount: 1,
+                name: "Collab - 01",
+                minCapacity: 8,
+                maxCapacity: 10,
+                wallWhiteBoard: false,
+                tableWhiteBoard: true,
                 tvAvailable: true,
-                image: "collab-02-img"
+                image: "collab-01-img",
+                focusArea: false,
+                sofa: false
+            ),
+            CollabSpace(
+                name: "Collab - 02",
+                minCapacity: 8,
+                maxCapacity: 10,
+                wallWhiteBoard: false,
+                tableWhiteBoard: true,
+                tvAvailable: true,
+                image: "collab-02-img",
+                focusArea: false,
+                sofa: false
             ),
             CollabSpace(
                 name: "Collab - 03",
-                capacity: 8,
-                whiteboardAmount: 0,
-                tableWhiteboardAmount: 1,
+                minCapacity: 8,
+                maxCapacity: 10,
+                wallWhiteBoard: false,
+                tableWhiteBoard: true,
                 tvAvailable: true,
-                image: "collab-03-img"
+                image: "collab-03-img",
+                focusArea: false,
+                sofa: false
             ),
             CollabSpace(
                 name: "Collab - 03A",
-                capacity: 8,
-                whiteboardAmount: 0,
-                tableWhiteboardAmount: 1,
+                minCapacity: 6,
+                maxCapacity: 8,
+                wallWhiteBoard: true,
+                tableWhiteBoard: true,
                 tvAvailable: false,
-                image: "collab-03a-img"
+                image: "collab-03a-img",
+                focusArea: true,
+                sofa: false
             ),
             CollabSpace(
                 name: "Collab - 04",
-                capacity: 8,
-                whiteboardAmount: 0,
-                tableWhiteboardAmount: 0,
+                minCapacity: 8,
+                maxCapacity: 12,
+                wallWhiteBoard: false,
+                tableWhiteBoard: false,
                 tvAvailable: true,
-                image: "collab-04-img"
+                image: "collab-04-img",
+                focusArea: true,
+                sofa: true
             ),
             CollabSpace(
                 name: "Collab - 05",
-                capacity: 8,
-                whiteboardAmount: 0,
-                tableWhiteboardAmount: 0,
+                minCapacity: 8,
+                maxCapacity: 12,
+                wallWhiteBoard: false,
+                tableWhiteBoard: false,
                 tvAvailable: true,
-                image: "collab-05-img"
+                image: "collab-05-img",
+                focusArea: true,
+                sofa: true
             ),
             CollabSpace(
-                name: "Collab - 07A",
-                capacity: 8,
-                whiteboardAmount: 1,
-                tableWhiteboardAmount: 0,
+                name: "Collab - 07",
+                minCapacity: 5,
+                maxCapacity: 7,
+                wallWhiteBoard: true,
+                tableWhiteBoard: true,
                 tvAvailable: true,
-                image: "collab-07-img"
+                image: "collab-07-img",
+                focusArea: true,
+                sofa: false
             )
             
         ]

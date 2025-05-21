@@ -3,7 +3,7 @@
 //  CoBo
 //
 //  Created by Evan Lokajaya on 25/03/25.
-//
+//  Adjusted by Rieno on 07/05/25
 
 import Foundation
 import SwiftData
@@ -11,18 +11,26 @@ import SwiftData
 @Model
 class CollabSpace: Hashable {
     var name: String
-    var capacity: Int
-    var whiteboardAmount: Int
-    var tableWhiteboardAmount: Int
+    var minCapacity: Int
+    var maxCapacity: Int
+    var wallWhiteBoard: Bool
+    var tableWhiteBoard: Bool
     var tvAvailable: Bool
-    var image:String
-    
-    init(name: String, capacity: Int, whiteboardAmount: Int, tableWhiteboardAmount: Int, tvAvailable: Bool, image: String) {
+    var image: String
+    var focusArea: Bool
+    var sofa: Bool
+
+    init(name: String, minCapacity: Int, maxCapacity: Int, wallWhiteBoard: Bool, tableWhiteBoard: Bool, tvAvailable: Bool, image: String,
+focusArea: Bool,
+         sofa: Bool) {
         self.name = name
-        self.capacity = capacity
-        self.whiteboardAmount = whiteboardAmount
-        self.tableWhiteboardAmount = tableWhiteboardAmount
+        self.minCapacity = minCapacity
+        self.maxCapacity = maxCapacity
+        self.wallWhiteBoard = wallWhiteBoard
+        self.tableWhiteBoard = tableWhiteBoard
         self.tvAvailable = tvAvailable
         self.image = image
+        self.focusArea = focusArea
+        self.sofa = sofa
     }
 }

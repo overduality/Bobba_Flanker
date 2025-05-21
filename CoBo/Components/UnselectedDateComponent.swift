@@ -1,9 +1,11 @@
 //
-//  UnselectedDateView.swift
-//  cobo-personal
+//  UnselectedDate.swift
+//  Core challenge 2 Stand Alone
 //
-//  Created by Amanda on 25/03/25.
+//  Created by Rieno on 10/05/25.
 //
+
+
 import SwiftUI
 
 struct UnselectedDateComponent :View{
@@ -23,30 +25,37 @@ struct UnselectedDateComponent :View{
                 return formatter.string(from: unselectedDate)
             }
         }
+//    Text("Tue, 30 Apr")
+//        .font(.system(size: 16, weight: .semibold, design:.default))
+//        .foregroundColor(buttonColor)
+//    RoundedRectangle(cornerSize: .init(width: 13, height: 13))
+//        .foregroundColor(.white)
+//        .frame(width: 170, height: 50)
+//        .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 8)
         var body: some View {
             
-                VStack {
-                    Text(formattedDate)
-                        .font(.system(size: 11))
-                        .foregroundColor(Color("Dark-Purple"))
-                    
-                    Text(dayText)
-                        .font(.system(size: 13))
-                        .fontWeight(.bold)
-                        .foregroundColor(Color("Dark-Purple"))
-                }
-                .padding()
-                .frame(width:72, height: 49)
-                .background(
-                    Color(.white)
-                    )
-                
-                .cornerRadius(12)
-                .overlay(
-                        RoundedRectangle(cornerRadius: 12) 
-                            .stroke(Color("Light-Purple"), lineWidth: 1) 
-                    )
-                
+            HStack {
+                Text(dayText + ",")
+                    .font(.system(size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color("Green-Dark"))
+                    .padding(.trailing, -4)
+                Text(formattedDate)
+                    .font(.system(size: 16))
+                    .fontWeight(.semibold)
+                    .foregroundColor(Color("Green-Dark"))
+            }
+            .frame(width:170, height: 50)
+            .background(
+                Color(.white)
+            )
+            .cornerRadius(13)
+            .shadow(color: Color.gray.opacity(0.25), radius: 4, x: 0, y: 8)
+//            .shadow(color: Color.black.opacity(0.25), radius: 4, x: 0, y: 8)
+            .padding(.horizontal, 20)
+            .padding(.vertical,16)
+
+
             
         }
     }
@@ -54,6 +63,6 @@ struct UnselectedDateComponent :View{
 
 struct UnselectedDateView_Previews: PreviewProvider {
     static var previews: some View {
-        UnselectedDateComponent(unselectedDate: .constant(Calendar.current.date(from: DateComponents(year: 2025, month: 3, day: 26))!))
+        UnselectedDateComponent(unselectedDate: .constant(Calendar.current.date(from: DateComponents(year: 2025, month: 10, day: 10))!))
     }
 }

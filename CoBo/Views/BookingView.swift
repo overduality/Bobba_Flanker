@@ -3,190 +3,170 @@
 //  cobo-personal
 //
 //  Created by Amanda on 25/03/25.
-//
+//  Adjusted by Rineo on 07/05/25.
 import SwiftUI
-struct BookingView : View{
+
+struct BookingView: View {
     @State private var selectedDate: Date = Date()
     @State private var navigationPath = NavigationPath()
     @State private var isLoading: Bool = false
-    @State var bookingController = BookingController()
-    @State private var bookings : [Booking] = []
-    
-    // responsive
+    @State private var bookingController = BookingController()
+    @State private var bookings: [Booking] = []
     let screenWidth = UIScreen.main.bounds.width
-    
-    var body:some View{
+    @State private var selectedFilter: FilterOption = .collabSpace
+    @State private var capacitySortOrder: CapacitySortOrder = .ascending // Default
+    var body: some View {
         NavigationStack(path: $navigationPath) {
-            GeometryReader
-            { geometry in
-                VStack(spacing: 0){
-                    ZStack(alignment: .top) {
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.white, Color.yellow.opacity(0.2)]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        .frame(height: screenWidth > 400 ? geometry.size.width * 0.55
-                               : geometry.size.width * 0.60)
-                        .cornerRadius(30, antialiased: true)
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                        .ignoresSafeArea()
-                        VStack(alignment: .leading, spacing: geometry.size.height*0.01) {
-                            Text("🔖").font(.system(.largeTitle)).fontWeight(.bold)
-                            Text("Book Collab Space").font(screenWidth > 400 ? .title2 : .title3).fontWeight(.bold)
-                            Text("Find and book the Collab Space that fits your needs and availability!").font(.callout)
-                        }
-                        .safeAreaPadding()
-                        .padding(.horizontal, geometry.size.width*0.05)
-                        .padding(.top, geometry.size.height*0.01)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    VStack(alignment: .leading, spacing: geometry.size.height*0.025){
-                        VStack(alignment: .leading, spacing: 16){
-                            HStack{
-                                Image("no-1").resizable(capInsets: EdgeInsets()).frame(width: geometry.size.width*0.045, height: geometry.size.width*0.045)
-                                Text("Select date").font(.system(.callout)).fontWeight(.medium)
-                            }
-                            DateManager(selectedDate: $selectedDate)
-                        }
-                        VStack(alignment: .leading){
-                            HStack{
-                                Image("no-2").resizable(capInsets: EdgeInsets()).frame(width: geometry.size.width*0.045, height: geometry.size.width*0.045)
-                                Text("Select available timeslots").font(.system(.callout)).fontWeight(.medium)
-                            }
-                            if isLoading {
-                                ScrollView {
-                                    VStack(spacing: 16) {
-                                        ForEach(0..<3, id: \.self) { _ in
-                                            BookingViewSkeletonCard()
-                                        }
+            GeometryReader { geometry in
+                VStack(spacing: 0) {
+                    Header()
+                        .padding(.bottom, -64)
+                    DateManager(selectedDate: $selectedDate)
+                        .padding(.horizontal, 28)
+                    FilterBar(selectedFilter: $selectedFilter, capacitySortOrder: $capacitySortOrder)
+                    
+    
+                    VStack(alignment: .leading, spacing: 40) {
+                        
+                        if isLoading {
+                            ScrollView {
+                                LazyVGrid(columns: [
+                                    GridItem(.flexible(), spacing: 40),
+                                    GridItem(.flexible(), spacing: 40)
+                                ], spacing: 40) {
+                                    ForEach(0..<6, id: \.self) { _ in
+                                        BookingViewSkeletonCard()
                                     }
-                                    .padding(.vertical)
                                 }
-                            } else {
-                                CollabspaceCardManager(navigationPath: $navigationPath, selectedDate: $selectedDate, geometrySize: geometry.size.width)
+                                .padding()
                             }
-                            
+                        
+
+                        } else {
+                            CollabspaceCardManager(
+                                navigationPath: $navigationPath,
+                                selectedDate: $selectedDate,
+                                geometrySize: geometry.size.width, selectedFilter: selectedFilter,
+                                capacitySortOrder: capacitySortOrder
+                            )
                         }
                     }
                     .safeAreaPadding()
                     .padding(.horizontal, 16)
-                    .padding(.top, geometry.size.height*(-0.075))
                     
                 }
+                
                 .navigationDestination(for: BookingFormContext.self) { context in
                     BookingFormView(navigationPath: $navigationPath, bookingDate: context.date, timeslot: context.timeslot, collabSpace: context.collabSpace)
                 }
-            }
-            
-            
-        }.onChange(of: selectedDate) { oldValue, newValue in
-            isLoading = true
-            bookings = []
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                bookings = bookingController.getBookingsByDate(newValue)
-                isLoading = false
-                
-            }
-            
-        }
-    }
-}
+                .onChange(of: selectedDate) { oldValue, newValue in
+                    isLoading = true
+                    bookings = []
 
+                    let currentSelectedDate = newValue
 
-
-private struct BookingViewSkeletonCard: View {
-    var body: some View {
-        VStack(alignment: .leading) {
-            HStack(spacing: 12) {
-                SkeletonView(RoundedRectangle(cornerRadius: 6))
-                    .frame(width: 163, height: 170, alignment: .leading)
-                    .clipped()
-                    .clipShape(TopLeftRoundedShape())
-                    .padding(.leading, -15)
-                    .padding(.top, -80)
-                VStack(alignment: .leading, spacing: 12) {
-                    SkeletonView(RoundedRectangle(cornerRadius: 6))
-                        .frame(width: 110, height: 20)
-                    HStack(alignment: .top, spacing: 8) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                .frame(width: 50, height: 10)
-
-                            HStack(spacing: 6) {
-                                VStack(alignment: .leading) {
-                                    HStack {
-                                        SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                            .frame(width: 22, height: 10)
-                                        SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                            .frame(width: 22, height: 10)
-                                    }
-
-                                    HStack {
-                                        SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                            .frame(width: 22, height: 10)
-                                            .offset(y: -10)
-
-                                        VStack {
-                                            SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                                .frame(width: 22, height: 10)
-                                            SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                                .frame(width: 22, height: 10)
-                                        }
-                                    }
-                                }
-                            }
-                            Spacer()
-                        }
-
-                        VStack(alignment: .leading, spacing: 6) {
-                            SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                .frame(width: 50, height: 10)
-
-                            HStack(spacing: 6) {
-                                SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                    .frame(width: 22, height: 10)
-                                SkeletonView(RoundedRectangle(cornerRadius: 6))
-                                    .frame(width: 22, height: 10)
-                            }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        if currentSelectedDate == selectedDate {
+                            bookings = bookingController.getBookingsByDate(newValue)
+                            isLoading = false
                         }
                     }
-}
-            }
+                }.toolbar(.hidden, for: .tabBar)
 
-            Divider()
-                .offset(y: -8)
 
-            VStack(alignment: .leading, spacing: 12) {
-                SkeletonView(RoundedRectangle(cornerRadius: 12))
-                    .frame(width: 120, height: 15)
-                HStack {
-                    SkeletonView(RoundedRectangle(cornerRadius: 12))
-                        .frame(width: 93, height: 36)
-                    SkeletonView(RoundedRectangle(cornerRadius: 12))
-                        .frame(width: 93, height: 36)
-                    SkeletonView(RoundedRectangle(cornerRadius: 12))
-                        .frame(width: 93, height: 36)
-                }
-
-                HStack {
-                    SkeletonView(RoundedRectangle(cornerRadius: 12))
-                        .frame(width: 93, height: 36)
-                    SkeletonView(RoundedRectangle(cornerRadius: 12))
-                        .frame(width: 93, height: 36)
-                    SkeletonView(RoundedRectangle(cornerRadius: 12))
-                        .frame(width: 93, height: 36)
-                }
             }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 1)
-        .redacted(reason: .placeholder)
+    
     }
 }
 
-    #Preview {
-        BookingView()
+
+
+
+    
+private struct BookingViewSkeletonCard: View {
+    var body: some View {
+        HStack{
+            VStack(alignment: .leading) {
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width: 296, height: 220, alignment: .leading)
+                    .clipped()
+                    .clipShape(TopLeftRoundedShape())
+                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                    .frame(width: 192, height: 24)
+                    .padding(.leading, 16)
+                HStack{
+                    VStack(alignment: .leading){
+                        SkeletonView(RoundedRectangle(cornerRadius: 6))
+                            .frame(width: 51, height: 16)
+                        HStack{
+                            VStack{
+                                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                    .frame(width: 27, height: 26)
+                                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                    .frame(width: 27, height: 26)
+                                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                    .frame(width: 27, height: 26)
+                            }
+                            VStack(spacing:20){
+                                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                    .frame(width: 100, height: 14)
+                                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                    .frame(width: 100, height: 14)
+                                SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                    .frame(width: 100, height: 14)
+                            }
+                        }
+                    }   .padding(.leading, 16)
+                        .padding(.bottom, 16)
+
+                
+                    VStack{
+                        SkeletonView(RoundedRectangle(cornerRadius: 6))
+                            .frame(width: 51, height: 16)
+                        HStack{
+                            SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                .frame(width: 27, height: 26)
+                            SkeletonView(RoundedRectangle(cornerRadius: 6))
+                                .frame(width: 34, height: 14)}
+                        
+                    }.padding(.leading, 40)
+                        .padding(.bottom,68)
+                }
+                }
+                VStack(alignment: .center, spacing: 16) {
+                    SkeletonView(RoundedRectangle(cornerRadius: 6))
+                        .frame(width: 160, height: 24)
+                    SkeletonView(RoundedRectangle(cornerRadius: 6))
+                        .frame(width: 152, height: 40)
+                    SkeletonView(RoundedRectangle(cornerRadius: 6))
+                        .frame(width: 152, height: 40)
+                    SkeletonView(RoundedRectangle(cornerRadius: 6))
+                        .frame(width: 152, height: 40)
+                    SkeletonView(RoundedRectangle(cornerRadius: 6))
+                        .frame(width: 152, height: 40)
+                    SkeletonView(RoundedRectangle(cornerRadius: 6))
+                        .frame(width: 152, height: 40)
+                    SkeletonView(RoundedRectangle(cornerRadius: 6))
+                        .frame(width: 152, height: 40)
+                    
+                    
+                }                    .padding(.horizontal, 32)
+
+                
+                
+            }
+            .background(Color.white)
+            .cornerRadius(20)
+            .shadow(radius: 1)
+            .redacted(reason: .placeholder)
+        }
+        
+        
     }
+
+
+
+#Preview {
+    BookingViewSkeletonCard()
+}
